@@ -6,84 +6,122 @@
 <title>We'll Be ― 通院支援アプリ モックアップ</title>
 <style>
   :root {
-    --orange: #F39800;
-    --orange-d: #E88B00;
-    --teal: #287D87;
-    --teal-d: #1F6E78;
-    --pink: #D65A73;
-    --ink: #2B2B2B;
-    --bg: #FAF7F2;
+    --ink:#222; --sub:#5b6066;
+    --orange:#F39800; --orange-d:#C66A00; --orange-l:#FFF3E0;
+    --teal:#2B8A96; --teal-d:#1F6672; --teal-l:#E3F4F6;
+    --pink:#D9607E; --pink-d:#B03E5B; --pink-l:#FCEBF0;
+    --line:#EAE3D8;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    margin: 0;
-    font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-    background: var(--bg);
+    font-family: "Yu Gothic Medium","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
     color: var(--ink);
+    background: #fff;
     line-height: 1.7;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 40px 20px 60px; }
-  h1 { font-size: 1.6rem; margin-bottom: 4px; }
-  .sub { color: #666; margin-top: 0; margin-bottom: 32px; }
-  .card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 80px; }
+
+  .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: .5px; color: var(--orange-d); }
+  h1 { font-size: 2.2rem; font-weight: 700; line-height: 1.25; margin-top: 10px; }
+  .lead { font-size: 1rem; color: var(--sub); margin-top: 14px; }
+
+  .axisrow { display: flex; gap: 14px; margin: 28px 0 36px; flex-wrap: wrap; }
+  .axiscard {
+    flex: 1; min-width: 160px;
+    border-radius: 18px; padding: 16px 18px;
   }
-  .card h2 { margin-top: 0; font-size: 1.1rem; }
+  .axiscard .n { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 4px; }
+  .axiscard .t { font-size: 15px; font-weight: 700; color: #222; }
+  .axiscard.c1 { background: var(--pink-l); border: 1px solid var(--pink); }
+  .axiscard.c2 { background: var(--teal-l); border: 1px solid var(--teal); }
+  .axiscard.c3 { background: var(--orange-l); border: 1px solid var(--orange); }
+
+  .cta-row { margin-bottom: 40px; }
   .cta {
     display: inline-block;
-    margin-top: 10px;
-    padding: 14px 28px;
-    background: var(--teal);
+    padding: 15px 34px;
+    background: var(--orange);
     color: #fff;
-    border-radius: 999px;
+    border-radius: 10px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
-  .cta:hover { background: var(--teal-d); }
-  ul { padding-left: 1.2em; }
-  .axis { display: flex; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
-  .axis span {
-    font-size: .85rem;
-    padding: 5px 12px;
-    border-radius: 999px;
+  .cta:hover { background: var(--orange-d); }
+
+  h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; }
+  .steps { list-style: none; counter-reset: s; }
+  .steps li {
+    counter-increment: s;
+    display: flex; gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: .95rem; color: #333;
+  }
+  .steps li:first-child { border-top: none; }
+  .steps li::before {
+    content: counter(s);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--teal);
     color: #fff;
-    font-weight: 600;
+    font-size: .8rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
   }
-  .axis .a1 { background: var(--pink); }
-  .axis .a2 { background: var(--teal); }
-  .axis .a3 { background: var(--orange); }
-  footer { text-align: center; color: #999; font-size: .8rem; margin-top: 40px; }
+  .steps code {
+    background: var(--orange-l);
+    color: var(--orange-d);
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-weight: 700;
+  }
+
+  section { margin-top: 44px; }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: .8rem; color: #9aa0a6;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="eyebrow">近畿大学病院 通院支援アプリ アイデアコンテスト2026 応募</div>
   <h1>We'll Be ― 家族とAIがそばにいる通院支援アプリ</h1>
-  <p class="sub">近畿大学病院 通院支援アプリ アイデアコンテスト2026 応募モックアップ</p>
+  <p class="lead">
+    提案内容をブラウザ上で実際に操作できるモックアップです。下のボタンから開いて、本人画面と見守り家族画面の連動をお試しください。
+  </p>
 
-  <div class="card">
-    <h2>このページについて</h2>
-    <p>本サイトは、提案「We'll Be」のインタラクティブなWebモックアップを公開しています。下のボタンからモックアップを開くと、ブラウザ上でアプリの操作感を実際に体験できます。</p>
-    <div class="axis">
-      <span class="a1">軸1：見守り家族</span>
-      <span class="a2">軸2：AI通院コンシェルジュ</span>
-      <span class="a3">軸3：おまかせ受付</span>
+  <div class="axisrow">
+    <div class="axiscard c1">
+      <div class="n">軸1</div>
+      <div class="t">見守り家族</div>
     </div>
-    <a class="cta" href="app/">モックアップを開く →</a>
+    <div class="axiscard c2">
+      <div class="n">軸2</div>
+      <div class="t">AI通院コンシェルジュ</div>
+    </div>
+    <div class="axiscard c3">
+      <div class="n">軸3</div>
+      <div class="t">おまかせ受付</div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>体験のおすすめ順</h2>
-    <ul>
-      <li>ホーム画面から「AIコンシェルジュに話しかける」をタップし、服薬サポート・症状記録を体験</li>
-      <li>「診察前のメモ」で、記録がAIによって自動要約される様子を確認</li>
-      <li>上部バーで「見守り家族」モードに切替え、招待コード <code>472915</code> で家族側の画面を体験</li>
-    </ul>
+  <div class="cta-row">
+    <a class="cta" href="app/">モックアップを開く</a>
   </div>
+
+  <section>
+    <h2>体験のおすすめ順</h2>
+    <ol class="steps">
+      <li>ホーム画面から「AIコンシェルジュに話しかける」をタップし、服薬サポート・症状記録を体験する</li>
+      <li>「診察前のメモ」で、記録がAIによって自動要約される様子を確認する</li>
+      <li>上部バーで見守り家族モードに切り替え、招待コード <code>472915</code> で家族側の画面を体験する</li>
+    </ol>
+  </section>
 
   <footer>&copy; 2026 We'll Be Team</footer>
 </div>
