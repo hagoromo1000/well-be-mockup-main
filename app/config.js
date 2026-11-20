@@ -9,6 +9,11 @@ window.CONFIG = {
   // ここにAPIキーを直接入力しても動作します（GitHubへコミットする際は空またはプレースホルダーにしてください）
   GEMINI_API_KEY: "__GEMINI_API_KEY__",
 
+  // 予備のAPIキー（別アカウント等）。GitHub Secretsの GEMINI_API_KEY_2 / GEMINI_API_KEY_3 から自動注入されます。
+  // メインのキーが無料枠の上限（429/503）に達したときだけ、自動で順番に切り替えます。
+  GEMINI_API_KEY_2: "__GEMINI_API_KEY_2__",
+  GEMINI_API_KEY_3: "__GEMINI_API_KEY_3__",
+
   // 管理者設定（?admin=1）のパスワード。GitHub Secretsの ADMIN_PASSWORD から自動注入されます。
   // 未設定（プレースホルダーのまま）の場合はローカル確認用に 'wellbe2026' を使います。
   ADMIN_PASSWORD: "__ADMIN_PASSWORD__",
@@ -39,4 +44,22 @@ window.getGeminiApiKey = function() {
     return configKey.trim();
   }
   return "";
+};
+
+// 予備のAPIキー群を取得するヘルパー（メインのキーが上限に達したときに順番に試す）
+window.getGeminiApiKeyFallbackList = function() {
+  const isPlaceholder = (v) => typeof v === 'string' && v.startsWith('__') && v.endsWith('__');
+  const candidates = [
+    window.CONFIG && window.CONFIG.GEMINI_API_KEY_2,
+    window.CONFIG && window.CONFIG.GEMINI_API_KEY_3
+  ];
+  return candidates
+    .filter(v => v && !isPlaceholder(v) && v.trim().length > 10)
+    .map(v => v.trim());
+};
+
+// 互換用：1つ目の予備キーのみを返す
+window.getGeminiApiKeyFallback = function() {
+  const list = window.getGeminiApiKeyFallbackList();
+  return list.length > 0 ? list[0] : "";
 };

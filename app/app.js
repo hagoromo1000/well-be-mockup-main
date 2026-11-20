@@ -470,8 +470,6 @@ function navigateTo(screenId, options = {}) {
   if (examplePanel) examplePanel.style.display = (screenId === 'symptom') ? 'flex' : 'none';
   const medExamplePanel = document.getElementById('demoExamplePanelMed');
   if (medExamplePanel) medExamplePanel.style.display = (screenId === 'med') ? 'flex' : 'none';
-  const voiceCtrlPanel = document.getElementById('voiceCtrlPanel');
-  if (voiceCtrlPanel) voiceCtrlPanel.style.display = (screenId === 'med' || screenId === 'symptom') ? 'flex' : 'none';
   if (screenId === 'patient-family' && typeof backToFamilyList === 'function') backToFamilyList();
 
   if (isFamily) {
@@ -535,6 +533,28 @@ function setVisibleRole(role) {
 function switchRole(role) {
   setVisibleRole(role);
   saveState();
+}
+
+// 「文字を大きく」トグル（スマホ幅のときのみ見た目に反映。設定はlocalStorageに保存）
+function applyTextBoost() {
+  const boosted = localStorage.getItem('well_be_text_boost') === '1';
+  document.body.classList.toggle('text-boost', boosted);
+  const label = document.getElementById('fontSizeToggleLabel');
+  if (label) label.textContent = boosted ? '文字を標準に戻す' : '文字を大きく';
+}
+function toggleTextBoost() {
+  const boosted = localStorage.getItem('well_be_text_boost') === '1';
+  localStorage.setItem('well_be_text_boost', boosted ? '0' : '1');
+  applyTextBoost();
+}
+
+// モバイル幅のとき、上部の操作ボタン群をアコーディオンで開閉する
+function toggleDemoControls() {
+  const controls = document.getElementById('demoControls');
+  const toggleBtn = document.getElementById('demoControlsToggle');
+  if (!controls || !toggleBtn) return;
+  const isOpen = controls.classList.toggle('open');
+  toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
 function switchHomeSubTab(tab) {
@@ -952,7 +972,7 @@ async function processAiConversation(userText, mode) {
   else if (text.includes('家族') || text.includes('見守り') || text.includes('娘')) {
     reply = '見守り家族には、おまかせ受付の状況や持ち物の準備状況が自動で共有されています。見守り家族の画面を確認しますか？';
     actionLabel = '👨‍👩‍👧 見守り家族画面を見る';
-    actionScreen = 'family-dash';
+    actionScreen = 'patient-family';
   }
   // 9. 院内案内・フロアマップ・会計などの質問
   else if (text.includes('どこ') || text.includes('何階') || text.includes('採血') || text.includes('会計') || text.includes('場所')) {
@@ -1037,7 +1057,7 @@ async function processAiConversation(userText, mode) {
     } else if (text.includes('見守り') || text.includes('家族') || text.includes('招待')) {
       reply = '見守り家族の登録や様子の確認でしたら、見守り家族の画面でご案内できます。こちらから開けますよ。';
       actionLabel = '👨‍👩‍👧 見守り家族画面を見る';
-      actionScreen = 'family-dash';
+      actionScreen = 'patient-family';
     } else if (text.includes('メモ') || text.includes('記録')) {
       reply = '診察前のメモの確認でしたら、メモ画面でご案内できます。こちらから開けますよ。';
       actionLabel = '📝 診察前のメモを見る';
@@ -2297,6 +2317,7 @@ document.addEventListener('DOMContentLoaded', () => {
   navigateTo(state.familyScreen || 'family-dash', { keepVisible: true });
   navigateTo(state.patientScreen || 'home', { keepVisible: true });
   setVisibleRole(state.visibleRole || 'patient');
+  applyTextBoost();
 
   document.querySelectorAll('.grid, .body').forEach(el => {
     el.addEventListener('wheel', e => {

@@ -37,6 +37,22 @@ jobs:
             echo "No GEMINI_API_KEY secret provided. Site will run in offline mock fallback mode."
           fi
 
+          KEY2="${{ secrets.GEMINI_API_KEY_2 }}"
+          if [ -n "$KEY2" ] && [ -f "app/config.js" ]; then
+            sed -i "s/__GEMINI_API_KEY_2__/$KEY2/g" app/config.js
+            echo "Fallback Gemini API key (2) injected successfully."
+          else
+            echo "No GEMINI_API_KEY_2 secret provided. No 2nd fallback key will be used."
+          fi
+
+          KEY3="${{ secrets.GEMINI_API_KEY_3 }}"
+          if [ -n "$KEY3" ] && [ -f "app/config.js" ]; then
+            sed -i "s/__GEMINI_API_KEY_3__/$KEY3/g" app/config.js
+            echo "Fallback Gemini API key (3) injected successfully."
+          else
+            echo "No GEMINI_API_KEY_3 secret provided. No 3rd fallback key will be used."
+          fi
+
           ADMIN_PW="${{ secrets.ADMIN_PASSWORD }}"
           if [ -n "$ADMIN_PW" ] && [ -f "app/config.js" ]; then
             sed -i "s/__ADMIN_PASSWORD__/$ADMIN_PW/g" app/config.js

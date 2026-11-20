@@ -2109,10 +2109,31 @@ button, select, input, textarea {
     display: none;
   }
 
+  .demo-controls-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 9px;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+
   .demo-controls {
+    display: none;
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 4px;
+  }
+
+  .demo-controls.open {
+    display: flex;
   }
 
   .mode-btn {
@@ -2156,10 +2177,21 @@ button, select, input, textarea {
     position: relative;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    /* 文字が小さすぎるので、幅/高さをあらかじめ 1/1.3 に縮めてから
+       scale(1.3) で引き伸ばし、実機幅をはみ出さずに全体を拡大表示する。
+       （zoomプロパティは width:100% と組み合わせるとはみ出すバグになるため使わない） */
+    width: 76.92%;
+    height: 76.92%;
+    transform: scale(1.3);
+    transform-origin: top left;
     border-radius: 0;
-    zoom: 1.55;
+  }
+
+  /* 「操作メニュー」の文字サイズボタンで、さらに大きい表示に切り替える */
+  body.text-boost .screen {
+    width: 66.67%;
+    height: 66.67%;
+    transform: scale(1.5);
   }
 }
 
@@ -2208,28 +2240,6 @@ button, select, input, textarea {
 
 .demo-side-panel .demo-example-panel { margin-top: 0; }
 
-.voice-ctrl-card { flex-direction: row; gap: 8px; }
-.voice-ctrl-btn {
-  flex: 1;
-  border: none;
-  background: var(--ai);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 7px 8px;
-  border-radius: 999px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.voice-ctrl-btn.stop {
-  background: #fff;
-  color: var(--ai);
-  border: 1.5px solid var(--ai);
-}
-
 .demo-example-title {
   font-size: 12px;
   font-weight: 800;
@@ -2273,6 +2283,7 @@ button, select, input, textarea {
 
 @media (max-width: 900px) {
   .demo-example-panel { display: none !important; }
+  .demo-side-panel { display: none !important; }
 }
 
 .phone-label {
@@ -2504,10 +2515,14 @@ button, select, input, textarea {
     position: relative;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    /* 文字が小さすぎるので、幅/高さをあらかじめ 1/1.3 に縮めてから
+       scale(1.3) で引き伸ばし、実機幅をはみ出さずに全体を拡大表示する。
+       （zoomプロパティは width:100% と組み合わせるとはみ出すバグになるため使わない） */
+    width: 76.92%;
+    height: 76.92%;
+    transform: scale(1.3);
+    transform-origin: top left;
     border-radius: 0;
-    zoom: 1.55;
   }
 }
 

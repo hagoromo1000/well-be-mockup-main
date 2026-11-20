@@ -9,8 +9,12 @@
    * @param {Array} history - 直近の会話履歴 [{ sender: 'me'|'ai', text: string }]
    * @returns {Promise<Object>} - パースされたAI返答オブジェクト
    */
-  async function callGeminiApi(userText, history = [], retryCount = 0) {
-    const apiKey = window.getGeminiApiKey();
+  // keySlot: 0=メインキー, 1以上=予備キー（getGeminiApiKeyFallbackListのslot-1番目）
+  async function callGeminiApi(userText, history = [], retryCount = 0, keySlot = 0) {
+    const fallbackList = typeof window.getGeminiApiKeyFallbackList === 'function' ? window.getGeminiApiKeyFallbackList() : [];
+    const apiKey = keySlot === 0
+      ? window.getGeminiApiKey()
+      : (fallbackList[keySlot - 1] || "");
     if (!apiKey) {
       throw new Error("GEMINI_API_KEY_NOT_CONFIGURED");
     }
@@ -66,7 +70,15 @@
         // モデル過負荷（429/503）は一時的な場合が多いので、1回だけ待って自動リトライする
         if ((response.status === 429 || response.status === 503) && retryCount < 1) {
           await new Promise(r => setTimeout(r, 1200));
-          return callGeminiApi(userText, history, retryCount + 1);
+          return callGeminiApi(userText, history, retryCount + 1, keySlot);
+        }
+        // 同じキーでのリトライも429/503のままなら、次の予備キー（別アカウント等）が
+        // 設定されていれば順番に切り替えて試す
+        if (response.status === 429 || response.status === 503) {
+          if (keySlot < fallbackList.length) {
+            console.warn(`Gemini API: key slot ${keySlot} rate-limited, switching to fallback key slot ${keySlot + 1}.`);
+            return callGeminiApi(userText, history, 0, keySlot + 1);
+          }
         }
         throw new Error(`HTTP_${response.status}`);
       }
