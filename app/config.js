@@ -30,7 +30,12 @@ window.getGeminiApiKey = function() {
     return localKey.trim();
   }
   const configKey = window.CONFIG && window.CONFIG.GEMINI_API_KEY;
-  if (configKey && configKey !== "__GEMINI_API_KEY__" && configKey.trim().length > 10) {
+  // プレースホルダー判定は固定文字列との比較ではなく「__で始まり__で終わる」形で行う。
+  // デプロイ時のsed置換（-g オプション）はファイル内の該当文字列を全て置き換えるため、
+  // ここで固定のプレースホルダー文字列と比較すると、注入後にその比較自体が
+  // 「実キー !== 実キー」になってしまい常にfalseとなるバグがあった。
+  const isPlaceholder = (v) => typeof v === 'string' && v.startsWith('__') && v.endsWith('__');
+  if (configKey && !isPlaceholder(configKey) && configKey.trim().length > 10) {
     return configKey.trim();
   }
   return "";

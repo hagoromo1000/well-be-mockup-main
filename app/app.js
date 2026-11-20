@@ -2316,7 +2316,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // 本番ではGitHub Secrets（ADMIN_PASSWORD）から自動注入される値を使う。未設定時はローカル確認用の既定値。
 function getAdminPassword() {
   const configVal = window.CONFIG && window.CONFIG.ADMIN_PASSWORD;
-  if (configVal && configVal !== "__ADMIN_PASSWORD__") return configVal;
+  // config.jsのgetGeminiApiKey()と同じ理由で、固定プレースホルダー文字列との比較は使わない
+  const isPlaceholder = (v) => typeof v === 'string' && v.startsWith('__') && v.endsWith('__');
+  if (configVal && !isPlaceholder(configVal)) return configVal;
   return 'wellbe2026';
 }
 function checkAdminAuth() {
