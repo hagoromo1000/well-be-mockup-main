@@ -2313,11 +2313,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 管理者用パスワード認証（簡易・このデモ限定。sessionStorageに保持し再入力を省略）
-const ADMIN_PASSWORD = 'wellbe2026';
+// 本番ではGitHub Secrets（ADMIN_PASSWORD）から自動注入される値を使う。未設定時はローカル確認用の既定値。
+function getAdminPassword() {
+  const configVal = window.CONFIG && window.CONFIG.ADMIN_PASSWORD;
+  if (configVal && configVal !== "__ADMIN_PASSWORD__") return configVal;
+  return 'wellbe2026';
+}
 function checkAdminAuth() {
   if (sessionStorage.getItem('well_be_admin_ok') === '1') return true;
   const input = prompt('管理者パスワードを入力してください');
-  if (input === ADMIN_PASSWORD) {
+  if (input === getAdminPassword()) {
     sessionStorage.setItem('well_be_admin_ok', '1');
     return true;
   }

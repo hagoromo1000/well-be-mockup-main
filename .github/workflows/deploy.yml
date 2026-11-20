@@ -26,7 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Inject Gemini API Key from Secrets
+      - name: Inject secrets into config.js
         shell: bash
         run: |
           KEY="${{ secrets.GEMINI_API_KEY }}"
@@ -35,6 +35,14 @@ jobs:
             echo "Gemini API key injected successfully."
           else
             echo "No GEMINI_API_KEY secret provided. Site will run in offline mock fallback mode."
+          fi
+
+          ADMIN_PW="${{ secrets.ADMIN_PASSWORD }}"
+          if [ -n "$ADMIN_PW" ] && [ -f "app/config.js" ]; then
+            sed -i "s/__ADMIN_PASSWORD__/$ADMIN_PW/g" app/config.js
+            echo "Admin password injected successfully."
+          else
+            echo "No ADMIN_PASSWORD secret provided. Site will fall back to the local default password."
           fi
 
       - name: Setup Pages

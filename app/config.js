@@ -9,6 +9,10 @@ window.CONFIG = {
   // ここにAPIキーを直接入力しても動作します（GitHubへコミットする際は空またはプレースホルダーにしてください）
   GEMINI_API_KEY: "__GEMINI_API_KEY__",
 
+  // 管理者設定（?admin=1）のパスワード。GitHub Secretsの ADMIN_PASSWORD から自動注入されます。
+  // 未設定（プレースホルダーのまま）の場合はローカル確認用に 'wellbe2026' を使います。
+  ADMIN_PASSWORD: "__ADMIN_PASSWORD__",
+
   // 使用するGeminiモデル（gemini-1.5-flash/gemini-2.5-flashは廃止済みのため gemini-3.8-flash を使用）
   GEMINI_MODEL: "gemini-3.8-flash",
 
