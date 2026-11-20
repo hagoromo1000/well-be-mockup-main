@@ -9,13 +9,13 @@
    * @param {Array} history - 直近の会話履歴 [{ sender: 'me'|'ai', text: string }]
    * @returns {Promise<Object>} - パースされたAI返答オブジェクト
    */
-  async function callGeminiApi(userText, history = []) {
+  async function callGeminiApi(userText, history = [], retryCount = 0) {
     const apiKey = window.getGeminiApiKey();
     if (!apiKey) {
       throw new Error("GEMINI_API_KEY_NOT_CONFIGURED");
     }
 
-    const model = (window.CONFIG && window.CONFIG.GEMINI_MODEL) || "gemini-1.5-flash";
+    const model = (window.CONFIG && window.CONFIG.GEMINI_MODEL) || "gemini-3.8-flash";
     const timeoutMs = (window.CONFIG && window.CONFIG.API_TIMEOUT_MS) || 12000;
     const url = `${GEMINI_API_ENDPOINT}/${model}:generateContent?key=${apiKey}`;
 
@@ -63,6 +63,11 @@
       if (!response.ok) {
         const errorText = await response.text();
         console.warn(`Gemini API HTTP Error (${response.status}):`, errorText);
+        // モデル過負荷（429/503）は一時的な場合が多いので、1回だけ待って自動リトライする
+        if ((response.status === 429 || response.status === 503) && retryCount < 1) {
+          await new Promise(r => setTimeout(r, 1200));
+          return callGeminiApi(userText, history, retryCount + 1);
+        }
         throw new Error(`HTTP_${response.status}`);
       }
 
@@ -106,7 +111,7 @@
     const key = (candidateKey || "").trim();
     if (!key) return { ok: false, error: "キーが入力されていません" };
 
-    const model = (window.CONFIG && window.CONFIG.GEMINI_MODEL) || "gemini-1.5-flash";
+    const model = (window.CONFIG && window.CONFIG.GEMINI_MODEL) || "gemini-3.8-flash";
     const url = `${GEMINI_API_ENDPOINT}/${model}:generateContent?key=${key}`;
 
     try {

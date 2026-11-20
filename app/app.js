@@ -5,6 +5,76 @@ const STORAGE_KEY = 'well_be_mockup_state_v4';
 const MIC_SVG = `<svg viewBox="0 0 512 512" fill="var(--ai)"><path d="M383.788,206.98v51.113c-0.013,35.266-14.301,67.108-37.475,90.318 c-23.212,23.176-55.042,37.464-90.307,37.464c-35.267,0-67.108-14.288-90.32-37.464c-23.174-23.211-37.462-55.052-37.474-90.318 V206.98H90.503v51.113c0.036,84.93,64.21,154.935,146.649,164.337V512h37.709v-89.57c82.426-9.402,146.599-79.407,146.636-164.337 V206.98H383.788z"/><path d="M256.006,344.41c47.589,0,86.305-38.728,86.305-86.318V86.318C342.311,38.728,303.596,0,256.006,0 c-47.59,0-86.318,38.728-86.318,86.318v171.775C169.688,305.682,208.416,344.41,256.006,344.41z"/></svg>`;
 const CHECK_SVG = `<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="2" fill="none"/></svg>`;
 
+// ==================== 絵文字の代わりに使う線画アイコン（AI感を減らすため） ====================
+function _ic(path) {
+  return `<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+}
+const ICONS = {
+  mic: _ic('<path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/>'),
+  speaker: _ic('<polygon points="4,9 8,9 12,5 12,19 8,15 4,15"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 7a7 7 0 0 1 0 10"/>'),
+  mute: _ic('<polygon points="4,9 8,9 12,5 12,19 8,15 4,15"/><line x1="16" y1="9" x2="21" y2="14"/><line x1="21" y1="9" x2="16" y2="14"/>'),
+  pill: _ic('<rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"/><line x1="12" y1="7.5" x2="12" y2="16.5" transform="rotate(-45 12 12)"/>'),
+  chat: _ic('<path d="M21 11.5a8.4 8.4 0 0 1-1.1 4.2L21 20l-4.3-1.1A8.5 8.5 0 1 1 21 11.5z"/>'),
+  memo: _ic('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>'),
+  calendar: _ic('<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
+  bag: _ic('<path d="M6 7h12l1 13H5z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>'),
+  bell: _ic('<path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+  sparkle: _ic('<path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/>'),
+  warning: _ic('<path d="M12 3 2 20h20z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.3" fill="currentColor"/>'),
+  check: _ic('<polyline points="4,12 9,17 20,6"/>'),
+  eye: _ic('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>'),
+  idea: _ic('<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a6 6 0 0 0-4 10.5c.6.5 1 1.2 1 2V15h6v-.5c0-.8.4-1.5 1-2A6 6 0 0 0 12 2z"/>'),
+  ai: _ic('<rect x="5" y="7" width="14" height="12" rx="2"/><path d="M12 2v5"/><circle cx="9" cy="13" r="1.3" fill="currentColor"/><circle cx="15" cy="13" r="1.3" fill="currentColor"/><line x1="9" y1="17" x2="15" y2="17"/>'),
+  gear: _ic('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>'),
+  camera: _ic('<path d="M4 8h3l2-2h6l2 2h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>'),
+  lock: _ic('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  folder: _ic('<path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'),
+  close: _ic('<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>'),
+  refresh: _ic('<path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 4v4.5h4.5"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.5"/><path d="M20 20v-4.5h-4.5"/>'),
+  sync: _ic('<path d="M4 9h13l-3-3"/><path d="M20 15H7l3 3"/>'),
+  mail: _ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
+  user: _ic('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+  family: _ic('<circle cx="7" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><path d="M1 21a6 6 0 0 1 12 0"/><path d="M11 21a6 6 0 0 1 12 0"/>'),
+  phone: _ic('<path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>'),
+};
+// 絵文字→アイコンの対応表（長い絵文字から先にマッチさせる）
+const EMOJI_ICON_MAP = [
+  ['👨‍👩‍👧', 'family'],
+  ['🎙️', 'mic'], ['🎤', 'mic'],
+  ['🔊', 'speaker'], ['🔇', 'mute'],
+  ['💊', 'pill'],
+  ['💬', 'chat'], ['💌', 'mail'],
+  ['📝', 'memo'], ['📁', 'folder'],
+  ['📅', 'calendar'],
+  ['🎒', 'bag'],
+  ['🔔', 'bell'],
+  ['✨', 'sparkle'],
+  ['⚠️', 'warning'],
+  ['✅', 'check'],
+  ['👀', 'eye'],
+  ['💡', 'idea'],
+  ['🤖', 'ai'],
+  ['⚙️', 'gear'],
+  ['📷', 'camera'],
+  ['🔒', 'lock'],
+  ['❌', 'close'],
+  ['↺', 'refresh'], ['🔄', 'refresh'],
+  ['⇄', 'sync'],
+  ['👨', 'user'], ['👩', 'user'],
+  ['📞', 'phone'],
+];
+// 文字列先頭の絵文字をアイコンSVGに差し替えて返す（残りの文字列はHTMLエスケープ済み）
+function iconize(str) {
+  if (!str) return '';
+  for (const [emo, name] of EMOJI_ICON_MAP) {
+    if (str.startsWith(emo)) {
+      const rest = str.slice(emo.length).replace(/^\s+/, '');
+      return `<span class="ic-wrap">${ICONS[name]}<span>${escapeHtml(rest)}</span></span>`;
+    }
+  }
+  return escapeHtml(str);
+}
+
 function getDefaultState() {
   return {
     patientScreen: 'home',          // 左：患者本人スマホに表示中の画面
@@ -17,7 +87,7 @@ function getDefaultState() {
     ],
     ttsEnabled: true,
     voiceEngine: 'voicevox', // 'voicevox' | 'browser'
-    voicevoxSpeaker: 2,      // 2: 四国めたん（ノーマル）
+    voicevoxSpeaker: 20,     // 20: もち子さん（ノーマル）をデフォルトに
     ttsVoiceName: '',
     ttsRate: 0.95,
     ttsPitch: 1.0,
@@ -147,33 +217,55 @@ function getBestJapaneseVoice() {
   return jpVoices[0];
 }
 
-function speakAiText(text, forceSpeak = false) {
+function speakAiText(text, forceSpeak = false, callbacks) {
   if (!state.ttsEnabled && !forceSpeak) return;
+  playVoice(text, { engine: state.voiceEngine, speaker: state.voicevoxSpeaker }, forceSpeak, callbacks);
+}
+
+// VOICEVOX→（失敗時）ブラウザ音声、の再生ロジック本体。
+// settingsを明示的に渡すので、設定画面の「試聴」でも本番のstateを一切書き換えずに使える。
+function playVoice(text, settings, forceSpeak, callbacks) {
+  const onPrepare = callbacks && callbacks.onPrepare;
+  const onStart = callbacks && callbacks.onStart;
+  const onEnd = callbacks && callbacks.onEnd;
+  const onFallback = callbacks && callbacks.onFallback;
+
+  const engine = settings && settings.engine;
+  const speaker = (settings && settings.speaker) || 20;
 
   // 1. VOICEVOX が有効な場合（デフォルト）
-  if ((!state.voiceEngine || state.voiceEngine === 'voicevox') && typeof window.speakVoicevox === 'function') {
+  if ((!engine || engine === 'voicevox') && typeof window.speakVoicevox === 'function') {
     setSpeakingIndicator(true);
-    window.speakVoicevox(text, state.voicevoxSpeaker || 2, () => {
+    window.speakVoicevox(text, speaker, () => {
       setSpeakingIndicator(true);
+      if (onStart) onStart();
     }, () => {
       setSpeakingIndicator(false);
-    }).catch(err => {
+      if (onEnd) onEnd();
+    }, onPrepare).catch(err => {
       console.warn('VOICEVOX error, fallback to browser speech synthesis:', err);
-      speakBrowserTts(text, forceSpeak);
+      if (onFallback) onFallback();
+      speakBrowserTts(text, forceSpeak, { onStart, onEnd });
     });
     return;
   }
 
   // 2. ブラウザ標準TTS
-  speakBrowserTts(text, forceSpeak);
+  speakBrowserTts(text, forceSpeak, { onStart, onEnd });
 }
 
-function speakBrowserTts(text, forceSpeak = false) {
+function speakBrowserTts(text, forceSpeak = false, callbacks) {
+  const onStart = callbacks && callbacks.onStart;
+  const onEnd = callbacks && callbacks.onEnd;
   if (!('speechSynthesis' in window)) {
     setSpeakingIndicator(false);
+    if (onEnd) onEnd();
     return;
   }
-  if (!state.ttsEnabled && !forceSpeak) return;
+  if (!state.ttsEnabled && !forceSpeak) {
+    if (onEnd) onEnd();
+    return;
+  }
 
   try {
     window.speechSynthesis.cancel();
@@ -192,7 +284,10 @@ function speakBrowserTts(text, forceSpeak = false) {
       .replace(/[「」『』]/g, '')
       .trim();
 
-    if (!cleanText) return;
+    if (!cleanText) {
+      if (onEnd) onEnd();
+      return;
+    }
 
     const utter = new SpeechSynthesisUtterance(cleanText);
     utter.lang = 'ja-JP';
@@ -204,18 +299,22 @@ function speakBrowserTts(text, forceSpeak = false) {
 
     utter.onstart = () => {
       setSpeakingIndicator(true);
+      if (onStart) onStart();
     };
     utter.onend = () => {
       setSpeakingIndicator(false);
+      if (onEnd) onEnd();
     };
     utter.onerror = () => {
       setSpeakingIndicator(false);
+      if (onEnd) onEnd();
     };
 
     window.speechSynthesis.speak(utter);
   } catch (e) {
     console.warn('TTS error:', e);
     setSpeakingIndicator(false);
+    if (onEnd) onEnd();
   }
 }
 
@@ -247,7 +346,7 @@ function toggleTtsEnabled() {
 
 function renderTtsButtons() {
   document.querySelectorAll('.tts-toggle-btn').forEach(btn => {
-    btn.textContent = state.ttsEnabled ? '🔊 音声ON' : '🔇 音声OFF';
+    btn.innerHTML = state.ttsEnabled ? `${ICONS.speaker} 音声ON` : `${ICONS.mute} 音声OFF`;
     btn.style.opacity = state.ttsEnabled ? '1' : '0.75';
   });
 }
@@ -320,9 +419,9 @@ const SCREEN_META = {
     tab: 'fam',
     time: '10:06',
     batt: '98',
-    tag: '軸1：見守り家族（本人スマホ・メッセージ確認）',
+    tag: '軸1：見守り家族（本人スマホ・家族一覧）',
     title: '⑤-C 見守り家族（本人スマホ）',
-    desc: '娘さんと見守り連携中です。<b>家族から届いたメッセージや見守り共有状況</b>をいつでも確認できます。音声読み上げやワンタップ返信も可能です。'
+    desc: '連携している家族の一覧から選ぶと、<b>「見守る」「見守られる」をお互いに確認</b>できます。長女とは会話・共有が中心、長男は共有前の状態もあわせて見せています。'
   },
   'family-invite': {
     role: 'family',
@@ -349,6 +448,7 @@ const SCREEN_META = {
 // 画面遷移
 // 画面遷移：画面IDの role に応じて「左：本人スマホ」か「右：家族スマホ」だけを切り替える
 function navigateTo(screenId, options = {}) {
+  closeWebview();
   if (!SCREEN_META[screenId]) screenId = 'home';
   const meta = SCREEN_META[screenId];
   const isFamily = meta.role === 'family';
@@ -366,11 +466,21 @@ function navigateTo(screenId, options = {}) {
   const targetView = document.getElementById(`view-${screenId}`);
   if (targetView) targetView.classList.add('active');
 
+  const examplePanel = document.getElementById('demoExamplePanel');
+  if (examplePanel) examplePanel.style.display = (screenId === 'symptom') ? 'flex' : 'none';
+  const medExamplePanel = document.getElementById('demoExamplePanelMed');
+  if (medExamplePanel) medExamplePanel.style.display = (screenId === 'med') ? 'flex' : 'none';
+  if (screenId === 'patient-family' && typeof backToFamilyList === 'function') backToFamilyList();
+
   if (isFamily) {
     document.getElementById('famStatusTime').textContent = meta.time;
     document.getElementById('famStatusBatt').textContent = meta.batt;
-    document.getElementById('famTabDash').classList.toggle('active', screenId === 'family-dash');
-    document.getElementById('famTabInvite').classList.toggle('active', screenId === 'family-invite');
+    const famTabBar = document.getElementById('famTabBar');
+    if (famTabBar) famTabBar.className = 'tabbar' + (meta.theme === 'ai' ? ' bar-ai' : meta.theme === 'fam' ? ' bar-fam' : '');
+    const famTabHome = document.getElementById('famTabHome');
+    const famTabFam = document.getElementById('famTabFam');
+    if (famTabHome) famTabHome.classList.toggle('active', screenId === 'family-dash');
+    if (famTabFam) famTabFam.classList.toggle('active', screenId === 'family-invite');
   } else {
     const statusBar = document.getElementById('statusBar');
     statusBar.className = 'status' + (meta.theme === 'ai' ? ' ai' : meta.theme === 'fam' ? ' fam' : '');
@@ -447,7 +557,7 @@ function notifyFamily(text, isDanger = false) {
   const toast = document.getElementById('famToast');
   const toastText = document.getElementById('famToastText');
   if (toast && toastText) {
-    toastText.textContent = text;
+    toastText.innerHTML = iconize(text);
     toast.classList.toggle('danger', isDanger);
     toast.style.display = 'block';
     clearTimeout(famToastTimer);
@@ -498,7 +608,7 @@ function renderFamilyNotices() {
   if (!listEl) return;
   listEl.innerHTML = state.familyNotices.slice().reverse().slice(0, 5).map(n => `
     <div class="fam-notice-item ${n.danger ? 'danger' : ''}">
-      <span class="t">${escapeHtml(n.time)}</span>${escapeHtml(n.text)}
+      <span class="t">${escapeHtml(n.time)}</span>${iconize(n.text)}
     </div>
   `).join('');
 }
@@ -507,6 +617,7 @@ function renderFamilyNotices() {
 function renderAll() {
   renderTtsButtons();
   renderAiStatusButton();
+  renderAiConnStatus();
   renderHomeMessages();
   renderMedScreen();
   renderSymptomScreen();
@@ -520,6 +631,34 @@ function renderAll() {
   renderSyncSidePanel();
 }
 
+// AIコンシェルジュの接続状態（管理者・一般どちらの閲覧者にも表示）
+// window.lastGeminiStatus: null(未試行) | 'ok' | 'error'
+function renderAiConnStatus() {
+  const hasKey = typeof window.getGeminiApiKey === 'function' && Boolean(window.getGeminiApiKey());
+  const status = window.lastGeminiStatus || null;
+
+  let cls = 'pending';
+  let text = 'AI接続：未設定（ルールベースで応答中）';
+  if (hasKey) {
+    if (status === 'ok') {
+      cls = 'ok';
+      text = 'AI接続：Gemini正常応答中';
+    } else if (status === 'error') {
+      cls = 'error';
+      text = 'AI接続：Gemini応答エラー（ルールベースに切替中）';
+    } else {
+      cls = 'pending';
+      text = 'AI接続：Gemini設定済み（応答待ち）';
+    }
+  }
+
+  const el = document.getElementById('aiConnStatusHeader');
+  if (el) {
+    el.innerHTML = `<span class="dot"></span>${text}`;
+    el.className = `ai-conn-status ${cls}`;
+  }
+}
+
 // AI設定ボタンの状態更新（接続中／未設定）
 function renderAiStatusButton() {
   const btn = document.getElementById('aiConfigBtn');
@@ -529,10 +668,10 @@ function renderAiStatusButton() {
   const hasKey = typeof window.getGeminiApiKey === 'function' && Boolean(window.getGeminiApiKey());
   if (hasKey) {
     btn.classList.add('active');
-    label.textContent = '✨ Gemini接続中';
+    label.innerHTML = `${ICONS.sparkle} Gemini接続中`;
   } else {
     btn.classList.remove('active');
-    label.textContent = '⚙️ AI設定';
+    label.innerHTML = `${ICONS.gear} AI設定`;
   }
 }
 
@@ -542,20 +681,20 @@ function renderChatBubble(m, idx, listName) {
     return `
       <div class="msg ai thinking">
         <span class="who"><span>AIコンシェルジュ</span></span>
-        <div class="thinking-dots">✨ 返答を生成中<span>.</span><span>.</span><span>.</span></div>
+        <div class="thinking-dots">考え中<span>.</span><span>.</span><span>.</span></div>
       </div>
     `;
   }
   if (m.sender === 'ai') {
     const encodedText = encodeURIComponent(m.text || '');
     const actionBtn = m.actionScreen && m.actionLabel
-      ? `<div><button type="button" class="ai-action-btn" onclick="navigateTo('${escapeHtml(m.actionScreen)}')">${escapeHtml(m.actionLabel)}</button></div>`
+      ? `<div><button type="button" class="ai-action-btn" onclick="navigateTo('${escapeHtml(m.actionScreen)}')">${iconize(m.actionLabel)}</button></div>`
       : '';
     return `
       <div class="msg ai">
         <span class="who">
           <span>AIコンシェルジュ</span>
-          <button type="button" class="speak-msg-btn" onclick="speakAiText(decodeURIComponent('${encodedText}'), true)" title="音声で読み上げる">🔊 聞く</button>
+          <button type="button" class="speak-msg-btn" onclick="speakAiText(decodeURIComponent('${encodedText}'), true)" title="音声で読み上げる">${ICONS.speaker} 聞く</button>
         </span>
         <div>${escapeHtml(m.text)}</div>
         ${actionBtn}
@@ -590,7 +729,7 @@ function renderHomeMessages() {
   const listEl = document.getElementById('homeMsgFamilyList');
   if (listEl) {
     listEl.innerHTML = state.familyMessages.slice().reverse().map(m => `
-      <div class="card msg-item fam" style="margin-bottom:5px;" onclick="navigateTo('patient-family')">
+      <div class="card msg-item fam" style="margin-bottom:5px;" onclick="openFamilyMemberWatched('musume')">
         <div class="msg-item-head">
           <span class="pill p1">見守り家族（娘）</span>
           <span class="muted">${escapeHtml(m.time)}</span>
@@ -604,7 +743,12 @@ function renderHomeMessages() {
 
 // ==================== ② AIコンシェルジュ 対話エンジン ====================
 const DANGER_KEYWORDS = ['強い痛み', '強く痛', '息苦し', 'くるしい', '意識', '動けない', '激しい胸', '胸が痛'];
-const SYMPTOM_KEYWORDS = ['どきどき', 'ドキドキ', 'ふらつ', 'めまい', '立ちくらみ', '頭が痛', '頭痛', '胃が', 'お腹', '吐き気', 'しびれ', 'だるい', '熱', '咳', '息切れ', '眠れない', 'むくみ', '痛い', '調子が悪'];
+const SYMPTOM_KEYWORDS = [
+  'どきどき', 'ドキドキ', 'ふらつ', 'めまい', '立ちくらみ', '頭が痛', '頭痛', '胃が', 'お腹', '吐き気', '吐いた',
+  'しびれ', 'だるい', '熱', '咳', '息切れ', '息苦し', '眠れない', 'むくみ', '痛い', '調子が悪', '気持ち悪',
+  '疲れた', 'しんどい', '苦しい', '動悸', '血が出', '倒れ', '飲みすぎ', '飲み過ぎ', 'オーバードーズ', 'OD', '食欲がない',
+  '食欲ない', '不安', '眠い', 'かゆい', '腫れ', '発疹', '下痢', '便秘', '血圧'
+];
 
 function containsDangerKeyword(text) {
   return DANGER_KEYWORDS.some(k => text.includes(k));
@@ -612,6 +756,20 @@ function containsDangerKeyword(text) {
 
 function containsSymptomKeyword(text) {
   return SYMPTOM_KEYWORDS.some(k => text.includes(k));
+}
+
+// 「あー」「うー」「ヤッホー」のような、記録する意味のない掛け声・感嘆詞だけの発話を判定
+function isMeaninglessUtterance(text) {
+  const normalized = text
+    .replace(/[!！?？。、,\.\s]/g, '')
+    .replace(/ー+/g, 'ー');
+  if (!normalized) return true;
+  // 母音・感嘆詞の繰り返しだけ（あー、うー、おー、えー 等）
+  if (/^[あいうえおんー]+$/.test(normalized)) return true;
+  // 定型の掛け声・挨拶的フィラー
+  const fillers = ['ヤッホー', 'やっほー', 'おーい', 'よいしょ', 'うんしょ', 'どっこいしょ', 'あはは', 'ふふふ', 'えへへ'];
+  if (fillers.some(f => normalized.includes(f))) return true;
+  return false;
 }
 
 // ユーザーの発話に対するAIコンシェルジュの返答生成＆状態連動（Gemini API ＋ ルールベースフォールバック）
@@ -645,9 +803,12 @@ async function processAiConversation(userText, mode) {
     try {
       const history = chatList.filter(c => !c.thinking);
       geminiResult = await window.callGeminiApi(text, history);
+      window.lastGeminiStatus = 'ok';
     } catch (err) {
       console.warn('Gemini API call failed, falling back to rule engine:', err);
+      window.lastGeminiStatus = 'error';
     } finally {
+      renderAiConnStatus();
       const thinkIdx = chatList.indexOf(thinkingMsg);
       if (thinkIdx !== -1) chatList.splice(thinkIdx, 1);
     }
@@ -795,13 +956,9 @@ async function processAiConversation(userText, mode) {
   else if (text.includes('どこ') || text.includes('何階') || text.includes('採血') || text.includes('会計') || text.includes('場所')) {
     reply = '明日の流れをご案内しますね。まず1階の総合受付で保険証を確認し、次に1階の採血室へ進みます。そのあと2階の内科外来へお越しください。順番が近づいたら「まもなくコール」でお知らせします。';
   }
-  // 10. マルチターン症状記録：状況の返答（「座ってたら急になった」「それはない」など）
-  else if (state.pendingSymptom && (text.includes('座って') || text.includes('立って') || text.includes('歩いて') || text.includes('寝て') || text.includes('急') || text.includes('それはない') || text.includes('ない'))) {
-    state.pendingSymptom.situation = text;
-    reply = `${state.pendingSymptom.time}から、「${text}」という状況ですね。記録しました。今はおさまっていますか？おさまったら教えてくださいね。`;
-  }
-  // 11. マルチターン症状記録：おさまった報告（「今は収まってきた」「おさまった」「治った」など）
-  else if (text.includes('収まって') || text.includes('おさまっ') || text.includes('落ち着いた') || text.includes('治った') || text.includes('大丈夫')) {
+  // 10. マルチターン症状記録：おさまった報告（「今は収まってきた」「おさまった」「治った」など）
+  // ※11番より先に判定しないと、聞き取り中はずっと状況説明として処理されてしまうため、ここで先に判定する
+  else if (state.pendingSymptom && (text.includes('収まって') || text.includes('おさまっ') || text.includes('落ち着いた') || text.includes('治った') || text.includes('大丈夫'))) {
     const symName = state.pendingSymptom ? state.pendingSymptom.symptom : '胸のどきどき';
     const startTime = state.pendingSymptom ? state.pendingSymptom.time : '14:10';
     const sitText = state.pendingSymptom && state.pendingSymptom.situation
@@ -828,6 +985,13 @@ async function processAiConversation(userText, mode) {
     actionScreen = 'memo';
     famNotice = `📝 お父さんの体調記録が追加されました：${startTime}〜${nowStr} ${symName}（現在はおさまっています）`;
   }
+  // 11. マルチターン症状記録：状況の返答
+  // 症状を聞き取り中（pendingSymptomあり）で、上の「おさまった」報告に当てはまらない場合は、
+  // 決め打ちキーワードに関わらず、意味のある発言を基本的に「状況の説明」として受け取り対話を続ける。
+  else if (state.pendingSymptom && !isMeaninglessUtterance(text)) {
+    state.pendingSymptom.situation = text;
+    reply = `${state.pendingSymptom.time}から、「${text}」という状況ですね。記録しました。今はおさまっていますか？おさまったら教えてくださいね。`;
+  }
   // 12. 新しい症状の申告（「胸がどきどきしてる」「頭が痛い」「めまいがする」など）
   else if (containsSymptomKeyword(text)) {
     state.pendingSymptom = {
@@ -842,11 +1006,52 @@ async function processAiConversation(userText, mode) {
     };
     reply = `${nowStr}から「${text}」ですね、記録します。強い胸の痛みや息苦しさはありますか？また、何をしていたときになりましたか？`;
   }
-  // 13. あいさつ・その他の自由会話
-  else if (text.includes('こんにちは') || text.includes('おはよう') || text.includes('こんばんは') || text.includes('ありがとう')) {
+  // 13. あいさつ
+  else if (text.includes('こんにちは') || text.includes('おはよう') || text.includes('こんばんは')) {
     reply = 'こんにちは、近大太郎さん！いつもそばにいるAIコンシェルジュです。お薬の記録や体調のメモ、明日の受付や持ち物の確認など、なんでも気軽にお話しくださいね。';
-  } else {
-    // 自由な発言も体調・相談メモとして記録できるように優しく応答
+  }
+  // 14. お礼
+  else if (text.includes('ありがとう') || text.includes('助かる') || text.includes('感謝')) {
+    reply = 'どういたしまして！いつでもそばにいますので、気になることがあればまた声をかけてくださいね。';
+  }
+  // 15. 調子・雑談（日常会話サポート）
+  else if (text.includes('元気') || text.includes('調子はどう') || text.includes('調子どう') || text.includes('天気') || text.includes('暇') || text.includes('ひま') || text.includes('雑談') || text.includes('おしゃべり') || text.includes('世間話')) {
+    reply = 'お話できて嬉しいです。何か気になることがあれば、体調のことでもそれ以外の世間話でも、いつでも話しかけてくださいね。';
+  }
+  // 16. 別れの挨拶
+  else if (text.includes('またね') || text.includes('さようなら') || text.includes('バイバイ') || text.includes('じゃあね') || text.includes('おやすみ')) {
+    reply = 'はい、また何かあればいつでも呼んでくださいね。お大事にどうぞ。';
+  }
+  // 17. アプリの操作サポート（使い方が分からない時の案内）
+  else if (text.includes('使い方') || text.includes('やり方') || text.includes('操作') || text.includes('わからない') || text.includes('分からない') || text.includes('困った') || text.includes('どうやって') || text.includes('設定')) {
+    if (text.includes('持ち物') || text.includes('荷物') || text.includes('忘れ物')) {
+      reply = '持ち物の確認でしたら、持ち物チェック画面でご案内できます。こちらから開けますよ。';
+      actionLabel = '🎒 持ち物チェック画面を開く';
+      actionScreen = 'checklist';
+    } else if (text.includes('受付') || text.includes('予約')) {
+      reply = '明日の受付のことでしたら、おまかせ受付の画面でご案内できます。こちらから開けますよ。';
+      actionLabel = '📅 予約情報・おまかせ受付を見る';
+      actionScreen = 'omakase';
+    } else if (text.includes('見守り') || text.includes('家族') || text.includes('招待')) {
+      reply = '見守り家族の登録や様子の確認でしたら、見守り家族の画面でご案内できます。こちらから開けますよ。';
+      actionLabel = '👨‍👩‍👧 見守り家族画面を見る';
+      actionScreen = 'family-dash';
+    } else if (text.includes('メモ') || text.includes('記録')) {
+      reply = '診察前のメモの確認でしたら、メモ画面でご案内できます。こちらから開けますよ。';
+      actionLabel = '📝 診察前のメモを見る';
+      actionScreen = 'memo';
+    } else {
+      reply = '画面下の「ホーム」「コンシェルジュ」「見守り家族」のボタンでいつでも移動できます。どの画面を開きたいか教えていただければ、私がそこへご案内しますね。';
+      actionLabel = 'ホームに戻る';
+      actionScreen = 'home';
+    }
+  }
+  else if (isMeaninglessUtterance(text)) {
+    // 「あー」「うー」「ヤッホー」などの意味のない発話・掛け声は記録しない
+    reply = 'お呼びですか？お薬のことや体調のこと、明日の受付や持ち物など、何でも話しかけてくださいね。';
+  }
+  // 体調・症状に関するキーワードを含む、または本人が明示的に記録を求めた場合のみ記録する
+  else if (containsSymptomKeyword(text) || text.includes('記録して') || text.includes('メモして')) {
     state.memoSymptoms.push({
       id: Date.now(),
       date: '本日',
@@ -860,8 +1065,17 @@ async function processAiConversation(userText, mode) {
     reply = `「${text}」ですね。${nowStr}の記録として診察前のメモに残しました。ほかにも気になることや、先生に聞いておきたいことはありますか？`;
     actionLabel = '📝 診察前のメモを見る';
     actionScreen = 'memo';
+  } else {
+    // それ以外の雑談・自由な発言は記録せず、聞き役として自然に応答する
+    reply = 'そうなんですね。お話を聞かせてくださってありがとうございます。体調のことや困りごとがあれば、いつでも遠慮なく話しかけてくださいね。';
   }
   } // end of rule-based fallback else
+
+  // Geminiに接続しようとして失敗した場合、応答の質がルールベースに急に落ちて
+  // 周りの人が「おかしくなった？」と困惑しないよう、一言だけ自然な言い訳を添える
+  if (hasGemini && !geminiResult) {
+    reply = `少し考えるのに時間がかかってしまいました。${reply}`;
+  }
 
   chatList.push({
     sender: 'ai',
@@ -1035,14 +1249,14 @@ function startVoiceRecognition(mode = 'symptom') {
 function openVoiceFallbackModal(mode = 'symptom') {
   activeRecognitionMode = mode;
   const html = `
-    <h4 style="color:var(--ai);">🎤 AIコンシェルジュと会話する</h4>
+    <h4 style="color:var(--ai);">${ICONS.mic} AIコンシェルジュと会話する</h4>
     <p class="muted" style="margin-bottom:6px;">話したい内容を入力するか、下のフレーズを選ぶとAIが<b>音声付きで返答</b>します。</p>
     <input type="text" id="voiceModalInput" placeholder="例：薬飲んだよ／頭が痛い／明日の持ち物は？" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:10.5px;margin-bottom:6px;">
     <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;">
       <button type="button" class="chip-btn" onclick="document.getElementById('voiceModalInput').value='階段を上ったときに少し息切れがした'">「階段を上ったときに少し息切れがした」</button>
       <button type="button" class="chip-btn" onclick="document.getElementById('voiceModalInput').value='明日の受付をしておいて'">「明日の受付をしておいて」</button>
       <button type="button" class="chip-btn" onclick="document.getElementById('voiceModalInput').value='明日の持ち物は何だっけ？'">「明日の持ち物は何だっけ？」</button>
-      <button type="button" class="chip-btn danger" onclick="document.getElementById('voiceModalInput').value='胸が強く痛んで息苦しい'">⚠️「胸が強く痛んで息苦しい」（危険検知テスト）</button>
+      <button type="button" class="chip-btn danger" onclick="document.getElementById('voiceModalInput').value='胸が強く痛んで息苦しい'">${ICONS.warning}「胸が強く痛んで息苦しい」（危険検知テスト）</button>
     </div>
     <div style="display:flex;gap:6px;">
       <div class="btn out ai" style="flex:1;" onclick="closeCommonModal()">キャンセル</div>
@@ -1063,7 +1277,7 @@ function submitVoiceModalInput() {
 
 function showEmergencyCall(targetName) {
   const html = `
-    <h4 style="color:#C62828;">📞 緊急連絡の発信確認（デモ）</h4>
+    <h4 style="color:#C62828;">${ICONS.phone} 緊急連絡の発信確認（デモ）</h4>
     <p style="margin-bottom:8px;line-height:1.5;">
       <b>${escapeHtml(targetName)}</b> へ電話を発信します。<br>
       <span class="muted">※AIは診断を行わず、強い痛み・息苦しさ等の危険キーワード検知時は記録より先に緊急連絡を案内します。</span>
@@ -1108,8 +1322,8 @@ function openAddQuestionModal() {
     <p class="muted" style="margin-bottom:6px;">診察時に聞き忘れないよう、話してメモに残せます（修正も可能）。</p>
     <input type="text" id="memoQInput" placeholder="先生に聞きたいことを入力" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:10.5px;margin-bottom:6px;">
     <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;">
-      <button type="button" class="chip-btn" onclick="document.getElementById('memoQInput').value='朝に立ちくらみがすることがあるので相談したい'">🎤「朝に立ちくらみがすることがあるので相談したい」</button>
-      <button type="button" class="chip-btn" onclick="document.getElementById('memoQInput').value='次回の採血結果がいつ出るか確認したい'">🎤「次回の採血結果がいつ出るか確認したい」</button>
+      <button type="button" class="chip-btn" onclick="document.getElementById('memoQInput').value='朝に立ちくらみがすることがあるので相談したい'">${ICONS.mic}「朝に立ちくらみがすることがあるので相談したい」</button>
+      <button type="button" class="chip-btn" onclick="document.getElementById('memoQInput').value='次回の採血結果がいつ出るか確認したい'">${ICONS.mic}「次回の採血結果がいつ出るか確認したい」</button>
     </div>
     <div style="display:flex;gap:6px;">
       <div class="btn out ai" style="flex:1;" onclick="closeCommonModal()">キャンセル</div>
@@ -1171,7 +1385,7 @@ function renderChecklistScreen() {
     </div>
   `).join('') + (state.savedPhotoNote ? `
     <div style="margin-top:5px;padding:4px 6px;background:var(--orange-l);border-radius:5px;font-size:9px;color:var(--orange-d);font-weight:700;">
-      📷 検査結果の紙の写真（スマホ保存済み）
+      ${ICONS.camera} 検査結果の紙の写真（スマホ保存済み）
     </div>
   ` : '');
 
@@ -1215,7 +1429,7 @@ function openPhotoSaveModal() {
   notifyFamily('📷 採血の検査結果の紙を写真で保存しました。');
 
   const html = `
-    <h4 style="color:var(--orange-d);">📷 検査結果の紙を写真で保存しました</h4>
+    <h4 style="color:var(--orange-d);">${ICONS.camera} 検査結果の紙を写真で保存しました</h4>
     <p style="margin-bottom:8px;line-height:1.5;">
       当日もし紙が見当たらなくても、アプリ内に保存した写真データを診察室で先生にお見せできます。<br>
       <span class="muted">（「採血の検査結果の紙」をチェック済みに更新しました）</span>
@@ -1270,41 +1484,204 @@ function toggleOmakaseAlways() {
 }
 
 // ⑤-C 患者側：見守り家族画面（メッセージ・共有確認）
-function renderPatientFamilyScreen() {
-  const countEl = document.getElementById('patientFamMsgCount');
-  const listEl = document.getElementById('patientFamMsgList');
+// 本人と家族が「お互いに見守り合える」仕組みのデモ。
+// 「長女」は双方向のデータを用意し、「長男」は未共有の状態を見せるための切り替えだけ実装。
+const FAMILY_MEMBERS = {
+  musume: { name: '長女（美咲さん）', shortName: '美咲さん', relation: '長女', shared: true },
+  musuko: { name: '長男（健太さん）', shortName: '健太さん', relation: '長男', shared: false }
+};
+let selectedFamilyMember = null;
+
+function renderFamilyMemberList() {
+  const listEl = document.getElementById('famMemberList');
   if (!listEl) return;
-
-  const msgs = state.familyMessages || [];
-  if (countEl) countEl.textContent = `${msgs.length}件`;
-
-  if (msgs.length === 0) {
-    listEl.innerHTML = `<div class="muted" style="text-align:center;padding:12px 0;font-size:9.5px;">まだメッセージはありません</div>`;
-    return;
-  }
-
-  listEl.innerHTML = msgs.slice().reverse().map(m => {
-    const encoded = encodeURIComponent(m.text || '');
+  listEl.innerHTML = Object.keys(FAMILY_MEMBERS).map(id => {
+    const m = FAMILY_MEMBERS[id];
+    // 「見守る」方向（本人が相手を見る）は今回のデモでは全員分未実装のため、
+    // sharedがtrueの相手も「見守り合い」ではなく「見守られ中」（相手が本人を見ている）と表示する
+    const statusLabel = m.shared ? '見守られ中' : '未共有';
+    const statusClass = m.shared ? 'on' : 'off';
     return `
-      <div class="patient-msg-card">
-        <div class="patient-msg-card-head">
-          <span class="sender">👩 娘さん</span>
-          <span class="time">${escapeHtml(m.time)}</span>
+      <div class="fam-member-row" onclick="showFamilyMemberDetail('${id}')">
+        <span class="fam-member-row-icon">${ICONS.user}</span>
+        <div class="fam-member-row-info">
+          <div class="fam-member-row-name">${escapeHtml(m.name)}</div>
+          <div class="fam-member-row-status ${statusClass}">${statusLabel}</div>
         </div>
-        <div class="patient-msg-card-body">「${escapeHtml(m.text)}」</div>
-        <div class="patient-msg-card-footer">
-          <button type="button" class="patient-msg-speak-btn" onclick="speakAiText(decodeURIComponent('${encoded}'), true)" title="メッセージを音声で読み上げる">
-            🔊 声で聞く
-          </button>
-        </div>
+        <span class="fam-member-row-arrow">›</span>
       </div>
     `;
   }).join('');
 }
 
+let selectedFamilyDirection = null; // null | 'watching' | 'watched'
+
+function showFamilyMemberDetail(memberId) {
+  if (!FAMILY_MEMBERS[memberId]) return;
+  selectedFamilyMember = memberId;
+  selectedFamilyDirection = null;
+  document.getElementById('famListView').style.display = 'none';
+  document.getElementById('famDetailView').style.display = '';
+  renderFamilyMemberDetail();
+}
+
+function backToFamilyList() {
+  selectedFamilyMember = null;
+  selectedFamilyDirection = null;
+  document.getElementById('famDetailView').style.display = 'none';
+  document.getElementById('famListView').style.display = '';
+}
+
+function backToFamilyChoice() {
+  selectedFamilyDirection = null;
+  document.getElementById('famContentView').style.display = 'none';
+  document.getElementById('famChoiceView').style.display = '';
+}
+
+// 見守る／見守られる の大きなボタンを押したときの内容表示
+// 「見守る」側（本人が相手の様子を見る）は今回デモでは未実装のため、
+// 長女であっても常に「共有していません」の表示にする
+function notSharedPlaceholderHtml(who) {
+  return `
+    <div style="text-align:center;padding:14px 4px;">
+      <svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px;"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <div style="font-weight:700;font-size:10.5px;color:#475569;">${escapeHtml(who)}はあなたに共有していません</div>
+      <div style="font-size:8.5px;color:var(--sub);margin-top:4px;line-height:1.5;">共有を始めるには、招待コードの発行からお願いします。</div>
+    </div>
+  `;
+}
+
+function showFamilyDirection(direction) {
+  if (!selectedFamilyMember) return;
+  selectedFamilyDirection = direction;
+  document.getElementById('famChoiceView').style.display = 'none';
+  document.getElementById('famContentView').style.display = '';
+  renderFamilyContent();
+}
+
+// ホーム画面の「家族からのひとこと」通知など、特定の家族の「見守られる」ページへ直接ジャンプしたい場合に使う
+function openFamilyMemberWatched(memberId) {
+  navigateTo('patient-family');
+  showFamilyMemberDetail(memberId);
+  showFamilyDirection('watched');
+}
+
+function renderFamilyContent() {
+  if (!selectedFamilyMember || !selectedFamilyDirection) return;
+  const member = FAMILY_MEMBERS[selectedFamilyMember];
+  const titleEl = document.getElementById('famContentTitle');
+  const bodyEl = document.getElementById('famContentBody');
+
+  if (selectedFamilyDirection === 'watching') {
+    // 「見守る」側は今回のデモでは未実装のため、常に共有していません表示
+    titleEl.innerHTML = `${ICONS.user} ${member.relation}さんを見守る`;
+    bodyEl.innerHTML = notSharedPlaceholderHtml(member.shortName);
+    return;
+  }
+
+  // 「見守られる」側
+  titleEl.innerHTML = `${ICONS.user} ${member.relation}さんに見守られる`;
+
+  if (!member.shared) {
+    bodyEl.innerHTML = notSharedPlaceholderHtml(member.shortName);
+    return;
+  }
+
+  const msgs = state.familyMessages || [];
+  const chatHtml = msgs.length === 0
+    ? `<div class="muted" style="text-align:center;padding:10px 0;font-size:9.5px;">まだメッセージはありません</div>`
+    : msgs.map(m => {
+        const isMe = m.sender === 'me';
+        const encoded = encodeURIComponent(m.text || '');
+        return `
+          <div class="msg fam ${isMe ? 'me' : 'in'}">
+            <div class="who"><span>${isMe ? '太郎さん' : '娘さん'}</span><span class="time">${escapeHtml(m.time)}</span></div>
+            <div>${escapeHtml(m.text)}</div>
+            ${isMe ? '' : `<button type="button" class="speak-msg-btn" style="margin-top:4px;" onclick="speakAiText(decodeURIComponent('${encoded}'), true)">${ICONS.speaker} 声で聞く</button>`}
+          </div>
+        `;
+      }).join('');
+
+  bodyEl.innerHTML = `
+    <div style="font-size:9px;font-weight:700;color:var(--sub);margin-bottom:4px;">娘さんとのやりとり</div>
+    <div class="chat fam-chat" id="famChatThread" style="margin-bottom:8px;">${chatHtml}</div>
+
+    <form class="chat-input-bar fam" onsubmit="event.preventDefault(); submitFamilyChatInput();">
+      <input type="text" id="famChatInput" placeholder="娘さんに返信する（自由入力）" autocomplete="off">
+      <button type="submit" class="chat-send-btn fam">送信</button>
+    </form>
+
+    <div class="chips-label fam" style="margin-top:6px;">返信の候補：</div>
+    <div class="chip-list">
+      <button type="button" class="chip-btn fam" onclick="replyToFamily('ありがとう！気をつけて病院向かうね')">「ありがとう！気をつけて病院向かうね」</button>
+      <button type="button" class="chip-btn fam" onclick="replyToFamily('薬はちゃんと飲んだよ、安心してね')">「薬はちゃんと飲んだよ、安心してね」</button>
+      <button type="button" class="chip-btn fam" onclick="replyToFamily('いま内科の前に着いたよ')">「いま内科の前に着いたよ」</button>
+    </div>
+
+    <div style="font-size:9px;font-weight:700;color:var(--sub);margin:10px 0 4px;">現在共有している項目</div>
+    <div class="fam-share-row">
+      <span>今日の予約・通院の進み具合</span>
+      <span class="fam-share-tag">共有中</span>
+    </div>
+    <div class="fam-share-row">
+      <span>持ち物チェックの準備状況</span>
+      <span class="fam-share-tag">共有中</span>
+    </div>
+    <div class="fam-share-row">
+      <span>夜のお薬の服用記録</span>
+      <span class="fam-share-tag">共有中</span>
+    </div>
+    <div class="fam-share-row">
+      <span>診察前メモ（本人が共有選択）</span>
+      <span class="fam-share-tag">共有中</span>
+    </div>
+  `;
+}
+
+function renderFamilyMemberDetail() {
+  if (!selectedFamilyMember) return;
+  const member = FAMILY_MEMBERS[selectedFamilyMember];
+
+  document.getElementById('famMemberNameTitle').innerHTML = `${ICONS.user} ${escapeHtml(member.name)}`;
+  document.getElementById('famMemberShortLabel').textContent = member.shortName;
+  document.getElementById('famDirBtnWatchingLabel').textContent = `${member.relation}さんを見守る`;
+  document.getElementById('famDirBtnWatchingSub').textContent = `${member.shortName}はあなたに共有していません`;
+  document.getElementById('famDirBtnWatchedLabel').textContent = `${member.relation}さんに見守られる`;
+
+  document.getElementById('famChoiceView').style.display = '';
+  document.getElementById('famContentView').style.display = 'none';
+
+  if (selectedFamilyDirection) renderFamilyContent();
+}
+
+function renderPatientFamilyScreen() {
+  if (!document.getElementById('famMemberList')) return;
+  renderFamilyMemberList();
+  if (selectedFamilyMember) {
+    if (selectedFamilyDirection) renderFamilyContent();
+    else renderFamilyMemberDetail();
+  }
+}
+
 function replyToFamily(text) {
-  notifyFamily(`お父さんからお返事: 「${text}」`);
-  speakAiText(`娘さんに「${text}」とお返事を送りました。`);
+  const trimmed = (text || '').trim();
+  if (!trimmed) return;
+  const now = new Date();
+  const nowStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+  state.familyMessages.push({ time: nowStr, text: trimmed, sender: 'me' });
+  saveState();
+  notifyFamily(`お父さんからお返事: 「${trimmed}」`);
+  speakAiText(`娘さんに「${trimmed}」とお返事を送りました。`);
+  if (selectedFamilyMember && selectedFamilyDirection === 'watched') renderFamilyContent();
+}
+
+function submitFamilyChatInput() {
+  const input = document.getElementById('famChatInput');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  replyToFamily(val);
 }
 
 // ⑤-A 見守り家族 招待コード画面
@@ -1406,7 +1783,7 @@ function advanceTimelineStep() {
 // 家族から「ひとことメッセージを送る」モーダル
 function openSendFamilyMsgModal() {
   const html = `
-    <h4 style="color:var(--family);">💌 お父さんへひとことメッセージを送る</h4>
+    <h4 style="color:var(--family);">${ICONS.mail} お父さんへひとことメッセージを送る</h4>
     <p class="muted" style="margin-bottom:6px;">送ったメッセージは、お父さん（近大 太郎さん）のホーム画面にすぐ届きます。</p>
     <input type="text" id="famMsgInput" placeholder="ひとことメッセージを入力" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:10.5px;margin-bottom:6px;" value="気をつけて行ってきてね！検査結果の紙、持った？">
     <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px;">
@@ -1453,7 +1830,7 @@ function dismissIncomingToast() {
 
 function openPatientFamilyModal() {
   const html = `
-    <h4 style="color:var(--family);">👨‍👩‍👧 見守り家族の設定・招待コード</h4>
+    <h4 style="color:var(--family);">${ICONS.family} 見守り家族の設定・招待コード</h4>
     <p style="margin-bottom:6px;line-height:1.45;">
       来院時に窓口で同意して発行された招待コードです。家族のスマホで入力すると見守り連携ができます。
     </p>
@@ -1463,8 +1840,8 @@ function openPatientFamilyModal() {
       <div class="muted">現在の連携状況：長女（登録済み）</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:5px;">
-      <div class="btn fam" onclick="closeCommonModal();navigateTo('patient-family');">💬 届いたメッセージ一覧を見る</div>
-      <div class="btn out" style="border-color:var(--family);color:var(--family);background:var(--family-l);" onclick="closeCommonModal();navigateTo('family-dash');">👀 家族のスマホ（見守り画面）を見る</div>
+      <div class="btn fam" onclick="closeCommonModal();openFamilyMemberWatched('musume');">${ICONS.chat} 届いたメッセージ一覧を見る</div>
+      <div class="btn out" style="border-color:var(--family);color:var(--family);background:var(--family-l);" onclick="closeCommonModal();navigateTo('family-dash');">${ICONS.eye} 家族のスマホ（見守り画面）を見る</div>
       <div class="btn out" onclick="closeCommonModal()">閉じる</div>
     </div>
   `;
@@ -1483,12 +1860,12 @@ function renderSyncSidePanel() {
     omakaseEl.style.color = state.omakaseEnabled ? 'var(--orange-d)' : '#94a3b8';
   }
   if (nightMedEl) {
-    nightMedEl.textContent = state.nightMedTaken ? '服用済み（✅飲んだ）' : '未服用（今の時間です）';
+    nightMedEl.innerHTML = state.nightMedTaken ? `服用済み（${ICONS.check}飲んだ）` : '未服用（今の時間です）';
     nightMedEl.style.color = state.nightMedTaken ? 'var(--ai)' : 'var(--orange-d)';
   }
   if (itemsEl) {
     const uncheckedCount = state.checklist.filter(i => !i.checked).length;
-    itemsEl.textContent = uncheckedCount === 0 ? 'すべて準備完了（✅）' : `未完了（残り${uncheckedCount}点）`;
+    itemsEl.innerHTML = uncheckedCount === 0 ? `すべて準備完了（${ICONS.check}）` : `未完了（残り${uncheckedCount}点）`;
     itemsEl.style.color = uncheckedCount === 0 ? 'var(--ai)' : 'var(--family)';
   }
   if (memoCountEl) {
@@ -1506,6 +1883,20 @@ function showInfoModal(title, message) {
   showCommonModal(html);
 }
 
+function showPageModal(innerHtml) {
+  const modal = document.getElementById('pageModal');
+  const content = document.getElementById('pageModalContent');
+  if (modal && content) {
+    content.innerHTML = innerHtml;
+    modal.style.display = 'flex';
+  }
+}
+
+function closePageModal() {
+  const modal = document.getElementById('pageModal');
+  if (modal) modal.style.display = 'none';
+}
+
 function showCommonModal(innerHtml) {
   const modal = document.getElementById('commonModal');
   const content = document.getElementById('commonModalContent');
@@ -1520,6 +1911,39 @@ function closeCommonModal() {
   if (modal) modal.style.display = 'none';
   const famModal = document.getElementById('famCommonModal');
   if (famModal) famModal.style.display = 'none';
+}
+
+// 外部サイトをアプリ内に埋め込み表示（Webview）
+function openWebview(title, url) {
+  const modal = document.getElementById('webviewModal');
+  const frame = document.getElementById('webviewFrame');
+  const titleEl = document.getElementById('webviewTitle');
+  const fallback = document.getElementById('webviewFallbackLink');
+  if (!modal || !frame) return;
+  if (titleEl) titleEl.textContent = title;
+  if (fallback) fallback.href = url;
+  frame.src = url;
+  modal.style.display = 'flex';
+}
+
+function closeWebview() {
+  const modal = document.getElementById('webviewModal');
+  const frame = document.getElementById('webviewFrame');
+  if (modal) modal.style.display = 'none';
+  if (frame) frame.src = 'about:blank';
+}
+
+// 家族スマホの「コンシェルジュ」タブ：本人専用機能のため案内のみ表示
+function showFamilyAiNotice() {
+  const html = `
+    <h4 style="color:var(--family);">${ICONS.mic} AIコンシェルジュについて</h4>
+    <p style="margin-bottom:8px;line-height:1.55;">
+      AIコンシェルジュは、どなたでも使える想定の機能です。<br>
+      ただし、このモックアップでは会話記録の実装がご本人のスマホ側のみのため、見守り家族のこの画面からは進めません。
+    </p>
+    <div class="btn fam" onclick="closeFamModal()">閉じる</div>
+  `;
+  showFamModal(html);
 }
 
 // 家族スマホ用モーダル
@@ -1539,13 +1963,84 @@ function closeFamModal() {
 
 // ==================== Gemini API & 音声設定モーダル ====================
 function openAiConfigModal() {
+  if (!checkAdminAuth()) return;
+
   const currentKey = typeof window.getGeminiApiKey === 'function' ? window.getGeminiApiKey() : '';
   const isConnected = Boolean(currentKey);
 
+  const html = `
+    <h4 style="color:var(--ai);">${ICONS.gear} Gemini API設定（管理者用）</h4>
+    <div class="ai-status-card ${isConnected ? 'active' : ''}" id="modalAiStatusCard">
+      <span class="status-dot ${isConnected ? 'on' : ''}"></span>${isConnected ? 'Gemini 3.8 Flash 接続中' : 'APIキー未設定（ルールベース応答で動作中）'}
+    </div>
+    <p class="muted" style="margin-bottom:14px;line-height:1.6;">
+      Google AI StudioのAPIキーを入力すると、Gemini 3.8 Flashと連携します。未設定の場合はルールベースの応答で動作します。
+    </p>
+
+    <div style="font-weight:700;margin-bottom:6px;">Gemini APIキー</div>
+    <div class="ai-key-input-row">
+      <input type="password" id="modalApiKeyInput" placeholder="AIzaSy... から始まるキーを入力" value="${escapeHtml(currentKey)}">
+      <button type="button" class="btn out" onclick="toggleApiKeyVisibility()">表示</button>
+    </div>
+    <div id="modalTestResult" style="font-size:12px;min-height:18px;margin-bottom:10px;font-weight:700;"></div>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button type="button" class="btn pri" style="flex:2;" onclick="saveAndTestModalApiKey()">接続テストして保存</button>
+      <button type="button" class="btn out" style="flex:1;" onclick="clearModalApiKey()">消去</button>
+    </div>
+
+    <div style="border-top:1px solid #e2e8f0;padding-top:10px;">
+      <div class="muted" style="font-size:11.5px;line-height:1.6;">
+        設定はこの端末のブラウザ内にのみ保存されます。<br>
+        プロンプト文面は <code>prompt.js</code> で調整できます。
+      </div>
+    </div>
+    <div style="margin-top:14px;">
+      <div class="btn out" onclick="closePageModal()">閉じる</div>
+    </div>
+  `;
+  showPageModal(html);
+}
+
+// コンシェルジュの声の設定（誰でも開ける公開モーダル。Geminiキーは含まない）
+// 「試聴」は voiceDraft（下書き）だけを操作し、本番のstateには触れない。
+// 「この声に決定」ボタンを押した時だけ state に確定・保存される。
+let voiceDraft = null;
+
+const VOICEVOX_SPEAKER_LABELS = {
+  20: '落ち着いた女性の声',
+  74: 'クールで聞き取りやすい声',
+  52: 'さわやかな青年の声',
+  21: '力強く頼れる声',
+  11: '明るく元気な男性の声',
+  10: 'やわらかく優しい声',
+  16: '親しみやすい女性の声',
+  51: '威厳のある男性の声'
+};
+
+function getCurrentVoiceLabel() {
+  if (!state.voiceEngine || state.voiceEngine === 'voicevox') {
+    return VOICEVOX_SPEAKER_LABELS[state.voicevoxSpeaker || 20] || '標準の声';
+  }
+  return state.ttsVoiceName ? `ブラウザ音声（${state.ttsVoiceName}）` : '端末の標準ブラウザ音声';
+}
+
+function openVoiceConfigModal() {
+  voiceDraft = {
+    engine: state.voiceEngine || 'voicevox',
+    speaker: state.voicevoxSpeaker || 20,
+    browserVoice: state.ttsVoiceName || '',
+    rate: state.ttsRate || 0.95,
+    pitch: state.ttsPitch || 1.0
+  };
+  renderVoiceConfigModal();
+}
+
+function renderVoiceConfigModal() {
   const allVoices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
   const jpVoices = allVoices.filter(v => v.lang && (v.lang.includes('ja') || v.lang.includes('JP')));
   const bestVoice = getBestJapaneseVoice();
-  const currentVoiceName = state.ttsVoiceName || (bestVoice ? bestVoice.name : '');
+  const currentVoiceName = voiceDraft.browserVoice || (bestVoice ? bestVoice.name : '');
 
   const voiceOptions = jpVoices.length > 0
     ? jpVoices.map(v => {
@@ -1556,131 +2051,151 @@ function openAiConfigModal() {
       }).join('')
     : '<option value="">端末の標準日本語音声</option>';
 
+  const isDirty = voiceDraft.engine !== (state.voiceEngine || 'voicevox')
+    || voiceDraft.speaker !== (state.voicevoxSpeaker || 20)
+    || voiceDraft.browserVoice !== (state.ttsVoiceName || '')
+    || voiceDraft.rate !== (state.ttsRate || 0.95)
+    || voiceDraft.pitch !== (state.ttsPitch || 1.0);
+
   const html = `
-    <h4 style="color:var(--ai);">✨ AIコンシェルジュ設定（Gemini ＆ 音声）</h4>
-    <div class="ai-status-card ${isConnected ? 'active' : ''}" id="modalAiStatusCard">
-      ${isConnected ? '🟢 Gemini 1.5 Flash 接続中（リアルタイム対話有効）' : '⚪ APIキー未設定（ルールベース応答で動作中）'}
-    </div>
-    <p class="muted" style="margin-bottom:8px;line-height:1.45;">
-      Google AI Studioで取得したAPIキーを入力すると、AIコンシェルジュがリアルなGemini 1.5 Flashと連携します。<br>
-      ※未設定時は自動的にルールベースの安心モックで動作します。
-    </p>
+    <h4 style="color:var(--ai);">${ICONS.mic} AIコンシェルジュの声の設定</h4>
 
-    <div style="font-weight:700;font-size:10px;margin-bottom:3px;">Gemini APIキー:</div>
-    <div class="ai-key-input-row">
-      <input type="password" id="modalApiKeyInput" placeholder="AIzaSy... から始まるキーを入力" value="${escapeHtml(currentKey)}">
-      <button type="button" class="btn out" style="padding:4px 8px;font-size:9.5px;" onclick="toggleApiKeyVisibility()">表示</button>
-    </div>
-    <div id="modalTestResult" style="font-size:9.5px;min-height:16px;margin-bottom:8px;font-weight:700;"></div>
-
-    <div style="display:flex;gap:6px;margin-bottom:6px;">
-      <button type="button" class="btn ai" style="flex:2;" onclick="saveAndTestModalApiKey()">接続テストして保存</button>
-      <button type="button" class="btn out" style="flex:1;" onclick="clearModalApiKey()">消去</button>
+    <div class="voice-status-line ${isDirty ? 'pending' : 'decided'}">
+      ${isDirty ? 'まだ声が決定されていません（試聴中）' : `現在の声は「${getCurrentVoiceLabel()}」です`}
     </div>
 
-    <!-- 音声チューニングセクション（VOICEVOX ＆ ブラウザ音声） -->
-    <div style="border-top:1.5px solid #e2e8f0;padding-top:8px;margin-top:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <h5 style="color:var(--ai);font-size:11.5px;margin:0;">🎙️ AI音声エンジン（VOICEVOX連携）</h5>
-        <span style="background:#e0f2fe;color:#0369a1;font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px;">超自然・人間肉声</span>
-      </div>
-
-      <div style="display:flex;gap:4px;margin-bottom:6px;">
-        <button type="button" class="btn ${(!state.voiceEngine || state.voiceEngine === 'voicevox') ? 'ai' : 'out'}" style="flex:1;font-size:9.5px;padding:5px;" onclick="switchVoiceEngine('voicevox')">
-          ✨ VOICEVOX（おすすめ）
-        </button>
-        <button type="button" class="btn ${state.voiceEngine === 'browser' ? 'ai' : 'out'}" style="flex:1;font-size:9.5px;padding:5px;" onclick="switchVoiceEngine('browser')">
-          標準ブラウザ音声
-        </button>
-      </div>
-
-      <div id="voicevoxConfigArea" style="display:${(!state.voiceEngine || state.voiceEngine === 'voicevox') ? 'block' : 'none'};">
-        <div style="font-weight:700;font-size:9.5px;margin-bottom:2px;">キャラクター・話者を選択：</div>
-        <select id="modalVoicevoxSpeaker" style="width:100%;padding:5px;font-size:9.5px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:5px;" onchange="updateVoicevoxSpeaker(this.value)">
-          <option value="2" ${(state.voicevoxSpeaker === 2 || !state.voicevoxSpeaker) ? 'selected' : ''}>四国めたん（ノーマル・丁寧で安心感のある声） ★おすすめ</option>
-          <option value="3" ${state.voicevoxSpeaker === 3 ? 'selected' : ''}>ずんだもん（ノーマル・元気で親しみやすい声）</option>
-          <option value="47" ${state.voicevoxSpeaker === 47 ? 'selected' : ''}>ナースロボ＿タイプＴ（医療向けアンドロイド声）</option>
-          <option value="0" ${state.voicevoxSpeaker === 0 ? 'selected' : ''}>四国めたん（あまあま・優しい声）</option>
-        </select>
-        <p class="muted" style="font-size:8px;line-height:1.35;margin-bottom:6px;">
-          💡 クラウドWEB API連携により、完全無料でインストール不要！どこでも高品質なVOICEVOX肉声が再生されます。<br>
-          ※PCにVOICEVOXアプリが起動している場合は自動で最速ローカル通信（遅延0.1秒）に切り替わります。
-        </p>
-      </div>
-
-      <div id="browserTtsConfigArea" style="display:${state.voiceEngine === 'browser' ? 'block' : 'none'};">
-        <div style="font-weight:700;font-size:9.5px;margin-bottom:2px;">ブラウザ音声モデル：</div>
-        <select id="modalVoiceSelect" style="width:100%;padding:5px;font-size:9.5px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:6px;" onchange="updateModalTtsSettings()">
-          ${voiceOptions}
-        </select>
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
-          <div style="flex:1;">
-            <div style="font-size:9px;color:var(--sub);margin-bottom:1px;">話す速度: <span id="labelTtsRate">${(state.ttsRate || 0.95).toFixed(2)}x</span></div>
-            <input type="range" id="inputTtsRate" min="0.8" max="1.2" step="0.05" value="${state.ttsRate || 0.95}" style="width:100%;" oninput="updateModalTtsSettings()">
-          </div>
-          <div style="flex:1;">
-            <div style="font-size:9px;color:var(--sub);margin-bottom:1px;">声の高さ: <span id="labelTtsPitch">${(state.ttsPitch || 1.0).toFixed(2)}</span></div>
-            <input type="range" id="inputTtsPitch" min="0.8" max="1.2" step="0.05" value="${state.ttsPitch || 1.0}" style="width:100%;" oninput="updateModalTtsSettings()">
-          </div>
-        </div>
-      </div>
-
-      <button type="button" class="btn out" id="btnTestVoice" style="width:100%;padding:6px;font-size:9.5px;margin-bottom:4px;" onclick="testSampleAiVoice()">
-        🔊 この設定で声をテスト再生
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button type="button" class="btn ${(!voiceDraft.engine || voiceDraft.engine === 'voicevox') ? 'pri' : 'out'}" style="flex:1;" onclick="switchVoiceEngine('voicevox')">
+        VOICEVOX
+      </button>
+      <button type="button" class="btn ${voiceDraft.engine === 'browser' ? 'pri' : 'out'}" style="flex:1;" onclick="switchVoiceEngine('browser')">
+        標準ブラウザ音声
       </button>
     </div>
 
-    <div style="border-top:1px solid #e2e8f0;padding-top:6px;margin-top:6px;">
-      <div class="muted" style="font-size:8.5px;line-height:1.4;">
-        🔒 設定はブラウザ（localStorage）に安全に保存されます。<br>
-        📁 プロンプトは <code>prompt.js</code> で自由に調整できます。
+    <div id="voicevoxConfigArea" style="display:${(!voiceDraft.engine || voiceDraft.engine === 'voicevox') ? 'block' : 'none'};">
+      <div style="font-weight:700;margin-bottom:6px;">キャラクター・話者を選択</div>
+      <select id="modalVoicevoxSpeaker" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px;" onchange="updateVoicevoxSpeaker(this.value)">
+        <option value="20" ${voiceDraft.speaker === 20 ? 'selected' : ''}>落ち着いた女性の声（おすすめ）</option>
+        <option value="74" ${voiceDraft.speaker === 74 ? 'selected' : ''}>クールで聞き取りやすい声</option>
+        <option value="52" ${voiceDraft.speaker === 52 ? 'selected' : ''}>さわやかな青年の声</option>
+        <option value="21" ${voiceDraft.speaker === 21 ? 'selected' : ''}>力強く頼れる声</option>
+        <option value="11" ${voiceDraft.speaker === 11 ? 'selected' : ''}>明るく元気な男性の声</option>
+        <option value="10" ${voiceDraft.speaker === 10 ? 'selected' : ''}>やわらかく優しい声</option>
+        <option value="16" ${voiceDraft.speaker === 16 ? 'selected' : ''}>親しみやすい女性の声</option>
+        <option value="51" ${voiceDraft.speaker === 51 ? 'selected' : ''}>威厳のある男性の声</option>
+      </select>
+      <p class="muted" style="font-size:11.5px;line-height:1.6;margin-bottom:10px;">
+        クラウドAPIで再生されるため、インストールは不要です。PCでVOICEVOXアプリが起動している場合は自動でローカル通信に切り替わります。<br>
+        VOICEVOX：もち子、琴詠ニア、雀松朱司、剣崎雌雄、玄野武宏、雨晴はう、九州そら、†聖騎士 紅桜†
+      </p>
+    </div>
+
+    <div id="browserTtsConfigArea" style="display:${voiceDraft.engine === 'browser' ? 'block' : 'none'};">
+      <div style="font-weight:700;margin-bottom:6px;">ブラウザ音声モデル</div>
+      <select id="modalVoiceSelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px;" onchange="updateModalTtsSettings()">
+        ${voiceOptions}
+      </select>
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
+        <div style="flex:1;">
+          <div style="font-size:11.5px;color:var(--sub);margin-bottom:3px;">話す速度: <span id="labelTtsRate">${voiceDraft.rate.toFixed(2)}x</span></div>
+          <input type="range" id="inputTtsRate" min="0.8" max="1.2" step="0.05" value="${voiceDraft.rate}" style="width:100%;" oninput="updateModalTtsSettings()">
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11.5px;color:var(--sub);margin-bottom:3px;">声の高さ: <span id="labelTtsPitch">${voiceDraft.pitch.toFixed(2)}</span></div>
+          <input type="range" id="inputTtsPitch" min="0.8" max="1.2" step="0.05" value="${voiceDraft.pitch}" style="width:100%;" oninput="updateModalTtsSettings()">
+        </div>
       </div>
     </div>
-    <div style="margin-top:6px;">
-      <div class="btn out" onclick="closeCommonModal()">閉じる</div>
+
+    <button type="button" class="btn out" id="btnTestVoice" style="width:100%;margin-bottom:6px;" onclick="testSampleAiVoice()">
+      ${ICONS.speaker} サンプル音声を再生（試聴・保存されません）
+    </button>
+    <div id="voiceFallbackNotice" style="font-size:11.5px;min-height:16px;margin-bottom:10px;color:#b45309;font-weight:700;"></div>
+
+    <button type="button" class="btn pri" style="width:100%;margin-bottom:10px;" onclick="confirmVoiceChoice()">
+      ${ICONS.check} この声に決定する
+    </button>
+
+    <div style="margin-top:4px;">
+      <div class="btn out" onclick="closePageModal()">閉じる</div>
     </div>
   `;
-  showCommonModal(html);
+  showPageModal(html);
+}
+
+function confirmVoiceChoice() {
+  state.voiceEngine = voiceDraft.engine;
+  state.voicevoxSpeaker = voiceDraft.speaker;
+  state.ttsVoiceName = voiceDraft.browserVoice;
+  state.ttsRate = voiceDraft.rate;
+  state.ttsPitch = voiceDraft.pitch;
+  saveState();
+  renderVoiceConfigModal();
 }
 
 function updateModalTtsSettings() {
+  if (!voiceDraft) return;
   const sel = document.getElementById('modalVoiceSelect');
   const rateInput = document.getElementById('inputTtsRate');
   const pitchInput = document.getElementById('inputTtsPitch');
   const rateLabel = document.getElementById('labelTtsRate');
   const pitchLabel = document.getElementById('labelTtsPitch');
 
-  if (sel) state.ttsVoiceName = sel.value;
+  if (sel) voiceDraft.browserVoice = sel.value;
   if (rateInput) {
-    state.ttsRate = parseFloat(rateInput.value) || 0.95;
-    if (rateLabel) rateLabel.textContent = `${state.ttsRate.toFixed(2)}x`;
+    voiceDraft.rate = parseFloat(rateInput.value) || 0.95;
+    if (rateLabel) rateLabel.textContent = `${voiceDraft.rate.toFixed(2)}x`;
   }
   if (pitchInput) {
-    state.ttsPitch = parseFloat(pitchInput.value) || 1.0;
-    if (pitchLabel) pitchLabel.textContent = state.ttsPitch.toFixed(2);
+    voiceDraft.pitch = parseFloat(pitchInput.value) || 1.0;
+    if (pitchLabel) pitchLabel.textContent = voiceDraft.pitch.toFixed(2);
   }
-  saveState();
+  // 決定前の下書き状態なので、保存ではなくステータス表示だけ更新する
+  const statusLine = document.querySelector('.page-modal-card .voice-status-line');
+  if (statusLine) {
+    statusLine.className = 'voice-status-line pending';
+    statusLine.textContent = 'まだ声が決定されていません（試聴中）';
+  }
 }
 
 function testSampleAiVoice() {
-  updateModalTtsSettings();
+  if (!voiceDraft) return;
   const btn = document.getElementById('btnTestVoice');
-  if (btn) btn.textContent = '🔊 音声を生成・再生中…';
-  speakAiText('こんにちは、近大太郎さん。いつもそばにいるAIコンシェルジュです。お薬の記録や体調の確認をお手伝いします。', true);
-  setTimeout(() => {
-    if (btn) btn.textContent = '🔊 この設定で声をテスト再生';
-  }, 3000);
+  const notice = document.getElementById('voiceFallbackNotice');
+  if (notice) notice.textContent = '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `${ICONS.speaker} 再生準備中…`;
+  }
+  const reset = () => {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `${ICONS.speaker} サンプル音声を再生（試聴・保存されません）`;
+    }
+  };
+  playVoice('私はAIコンシェルジュです。あなたのそばにいつでもいます。', { engine: voiceDraft.engine, speaker: voiceDraft.speaker }, true, {
+    onPrepare: () => { if (btn) btn.innerHTML = `${ICONS.speaker} 再生準備中…`; },
+    onStart: () => { if (btn) btn.innerHTML = `${ICONS.speaker} 再生中…`; },
+    onEnd: reset,
+    onFallback: () => { if (notice) notice.textContent = '音声サーバーに接続できなかったため、ブラウザ標準音声で再生しました。'; }
+  });
 }
 
 function switchVoiceEngine(engine) {
-  state.voiceEngine = engine;
-  saveState();
-  openAiConfigModal();
+  if (!voiceDraft) return;
+  voiceDraft.engine = engine;
+  renderVoiceConfigModal();
 }
 
 function updateVoicevoxSpeaker(speakerId) {
-  state.voicevoxSpeaker = parseInt(speakerId, 10) || 2;
-  saveState();
+  if (!voiceDraft) return;
+  voiceDraft.speaker = parseInt(speakerId, 10) || 20;
+  const statusLine = document.querySelector('.page-modal-card .voice-status-line');
+  if (statusLine) {
+    statusLine.className = 'voice-status-line pending';
+    statusLine.textContent = 'まだ声が決定されていません（試聴中）';
+  }
 }
 
 function toggleApiKeyVisibility() {
@@ -1721,18 +2236,18 @@ async function saveAndTestModalApiKey() {
     localStorage.setItem('well_be_gemini_api_key', key);
     if (resEl) {
       resEl.style.color = '#16a34a';
-      resEl.textContent = '✅ 接続成功！Gemini APIキーを保存しました。';
+      resEl.innerHTML = `${ICONS.check} 接続成功！Gemini APIキーを保存しました。`;
     }
     const card = document.getElementById('modalAiStatusCard');
     if (card) {
       card.className = 'ai-status-card active';
-      card.textContent = '🟢 Gemini 1.5 Flash 接続中（リアルタイム対話有効）';
+      card.innerHTML = '<span class="status-dot on"></span>Gemini 3.8 Flash 接続中（リアルタイム対話有効）';
     }
     renderAiStatusButton();
   } else {
     if (resEl) {
       resEl.style.color = '#ef4444';
-      resEl.textContent = `❌ 接続失敗: ${result.error}`;
+      resEl.innerHTML = `${ICONS.close} 接続失敗: ${escapeHtml(result.error)}`;
     }
   }
 }
@@ -1749,7 +2264,7 @@ function clearModalApiKey() {
   }
   if (card) {
     card.className = 'ai-status-card';
-    card.textContent = '⚪ APIキー未設定（ルールベース応答で動作中）';
+    card.innerHTML = '<span class="status-dot"></span>APIキー未設定（ルールベース応答で動作中）';
   }
   renderAiStatusButton();
 }
@@ -1789,4 +2304,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: false });
   });
+
+  // 管理者用Gemini設定ボタン：URLに ?admin=1 がある時のみ表示（審査員が通常閲覧する画面には出さない）
+  if (new URLSearchParams(location.search).get('admin') === '1') {
+    const adminBtn = document.getElementById('aiConfigBtn');
+    if (adminBtn) adminBtn.style.display = '';
+  }
 });
+
+// 管理者用パスワード認証（簡易・このデモ限定。sessionStorageに保持し再入力を省略）
+const ADMIN_PASSWORD = 'wellbe2026';
+function checkAdminAuth() {
+  if (sessionStorage.getItem('well_be_admin_ok') === '1') return true;
+  const input = prompt('管理者パスワードを入力してください');
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem('well_be_admin_ok', '1');
+    return true;
+  }
+  if (input !== null) alert('パスワードが違います。');
+  return false;
+}

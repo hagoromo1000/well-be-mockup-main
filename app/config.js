@@ -9,8 +9,8 @@ window.CONFIG = {
   // ここにAPIキーを直接入力しても動作します（GitHubへコミットする際は空またはプレースホルダーにしてください）
   GEMINI_API_KEY: "__GEMINI_API_KEY__",
 
-  // 使用するGeminiモデル（高速・低遅延・高精度の gemini-1.5-flash 推奨）
-  GEMINI_MODEL: "gemini-1.5-flash",
+  // 使用するGeminiモデル（gemini-1.5-flash/gemini-2.5-flashは廃止済みのため gemini-3.8-flash を使用）
+  GEMINI_MODEL: "gemini-3.8-flash",
 
   // Gemini API呼び出しの有効/無効（falseにすると従来のルールベースモックで動作）
   USE_GEMINI: true,

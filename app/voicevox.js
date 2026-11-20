@@ -3,14 +3,19 @@
 
 (function() {
   let currentAudio = null;
+  let playToken = 0;
   const audioCache = new Map();
 
-  // 利用可能なVOICEVOX話者
+  // 利用可能なVOICEVOX話者（表示名はキャラクター名を伏せた声質表現。クレジット表記はcreditNameに保持）
   const SPEAKERS = [
-    { id: 2, name: '四国めたん（ノーマル・丁寧で安心感のある声）', desc: 'おすすめ・コンシェルジュ向き' },
-    { id: 3, name: 'ずんだもん（ノーマル・元気で親しみやすい声）', desc: '人気' },
-    { id: 47, name: 'ナースロボ＿タイプＴ（医療向け・落ち着いた声）', desc: '医療テーマに最適' },
-    { id: 0, name: '四国めたん（あまあま・優しい声）', desc: '癒し' }
+    { id: 20, name: '落ち着いた女性の声', desc: 'おすすめ・デフォルト', creditName: 'もち子さん' },
+    { id: 74, name: 'クールで聞き取りやすい声', desc: '', creditName: '琴詠ニア' },
+    { id: 52, name: 'さわやかな青年の声', desc: '', creditName: '雀松朱司' },
+    { id: 21, name: '力強く頼れる声', desc: '', creditName: '剣崎雌雄' },
+    { id: 11, name: '明るく元気な男性の声', desc: '', creditName: '玄野武宏' },
+    { id: 10, name: 'やわらかく優しい声', desc: '', creditName: '雨晴はう' },
+    { id: 16, name: '親しみやすい女性の声', desc: '', creditName: '九州そら' },
+    { id: 51, name: '威厳のある男性の声', desc: '', creditName: '†聖騎士 紅桜†' }
   ];
 
   function stopVoicevox() {
@@ -71,8 +76,9 @@
       return downloadUrl;
     }
 
-    // 生成完了をポーリング（最大15回 = 約4秒）
-    for (let i = 0; i < 15; i++) {
+    // 生成完了をポーリング（最大20回 = 約8秒）。準備できないまま終わったら失敗として扱う
+    // （未完成のURLをそのまま返すと、再生が途中で止まる／遅れて再生されるなど不安定になるため）
+    for (let i = 0; i < 20; i++) {
       try {
         const sRes = await fetch(statusUrl, { signal: AbortSignal.timeout(2000) });
         if (sRes.ok) {
@@ -84,19 +90,22 @@
       } catch (e) {
         // 次のポーリングへ
       }
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 400));
     }
 
-    return downloadUrl;
+    throw new Error('Web API audio not ready in time');
   }
 
   /**
    * VOICEVOXで音声を合成して再生する
    */
-  async function speakVoicevox(rawText, speakerId = 2, onStart, onEnd) {
+  async function speakVoicevox(rawText, speakerId = 2, onStart, onEnd, onPrepare) {
     stopVoicevox();
+    const myToken = ++playToken;
     const text = cleanSpeechText(rawText);
     if (!text) return false;
+
+    if (typeof onPrepare === 'function') onPrepare();
 
     const cacheKey = `${speakerId}:${text}`;
     let audioUrl = audioCache.get(cacheKey);
@@ -119,6 +128,8 @@
       }
     }
 
+    // 待っている間に別の再生リクエストが入っていたら、この古いリクエストは再生しない（二重再生防止）
+    if (myToken !== playToken) return false;
     if (!audioUrl) return false;
 
     const audio = new Audio(audioUrl);

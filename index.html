@@ -13,6 +13,7 @@
     --line:#EAE3D8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #fff; }
   body {
     font-family: "Yu Gothic Medium","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
     color: var(--ink);
@@ -25,27 +26,29 @@
   h1 { font-size: 2.2rem; font-weight: 700; line-height: 1.25; margin-top: 10px; }
   .lead { font-size: 1rem; color: var(--sub); margin-top: 14px; }
 
-  .axisrow { display: flex; gap: 14px; margin: 28px 0 36px; flex-wrap: wrap; }
-  .axiscard {
-    flex: 1; min-width: 160px;
-    border-radius: 18px; padding: 16px 18px;
+  .axis { display: flex; gap: 10px; margin: 20px 0 36px; flex-wrap: wrap; }
+  .axis span {
+    font-size: .85rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 600;
   }
-  .axiscard .n { font-size: 12px; font-weight: 700; color: #555; margin-bottom: 4px; }
-  .axiscard .t { font-size: 15px; font-weight: 700; color: #222; }
-  .axiscard.c1 { background: var(--pink-l); border: 1px solid var(--pink); }
-  .axiscard.c2 { background: var(--teal-l); border: 1px solid var(--teal); }
-  .axiscard.c3 { background: var(--orange-l); border: 1px solid var(--orange); }
+  .axis .a1 { background: var(--pink); }
+  .axis .a2 { background: var(--teal); }
+  .axis .a3 { background: var(--orange); }
 
   .cta-row { margin-bottom: 40px; }
   .cta {
     display: inline-block;
-    padding: 15px 34px;
+    margin-top: 10px;
+    padding: 14px 28px;
     background: var(--orange);
     color: #fff;
-    border-radius: 10px;
+    border-radius: 999px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.05rem;
   }
   .cta:hover { background: var(--orange-d); }
 
@@ -64,7 +67,7 @@
     flex-shrink: 0;
     width: 26px; height: 26px;
     border-radius: 50%;
-    background: var(--teal);
+    background: var(--orange);
     color: #fff;
     font-size: .8rem; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
@@ -78,6 +81,135 @@
   }
 
   section { margin-top: 44px; }
+
+  .problem-card p { font-size: .92rem; color: #444; margin-bottom: 10px; }
+  .problem-card p:last-child { margin-bottom: 0; }
+  .wall-list { list-style: none; margin-top: 10px; }
+  .wall-list li {
+    font-size: .88rem; color: #444;
+    padding: 8px 0 8px 28px;
+    position: relative;
+    border-top: 1px solid var(--line);
+  }
+  .wall-list li:first-child { border-top: none; }
+  .wall-list b { color: var(--orange-d); }
+  .wall-list li::before {
+    content: "";
+    position: absolute; left: 0; top: 14px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  .axis-cards { display: flex; flex-direction: column; margin-top: 16px; }
+  .axis-card {
+    position: relative;
+    padding: 26px 4px 26px 22px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+  }
+  .axis-card:first-child { padding-top: 6px; }
+  .axis-card:last-child { border-bottom: none; }
+  .axis-card::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 0;
+    bottom: 0;
+    width: 9px;
+    border-radius: 999px 0 0 999px;
+    box-shadow: 1px 1px 4px rgba(0,0,0,.18);
+  }
+  .axis-card.c1::before { background: var(--pink); }
+  .axis-card.c2::before { background: var(--teal); }
+  .axis-card.c3::before { background: var(--orange); }
+  .axis-card .axis-text { flex: 1; min-width: 0; }
+  .axis-card .tag {
+    display: inline-block;
+    font-size: .72rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    color: #fff; margin-bottom: 8px;
+  }
+  .axis-card.c1 .tag { background: var(--pink); }
+  .axis-card.c2 .tag { background: var(--teal); }
+  .axis-card.c3 .tag { background: var(--orange); }
+  .axis-card h3 { font-size: 1rem; margin-bottom: 6px; }
+  .axis-card p { font-size: .88rem; color: #444; margin-bottom: 6px; }
+  .axis-flow { margin-top: 12px; display: flex; flex-direction: column; align-items: flex-start; }
+  .axis-flow-step {
+    font-size: .76rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #f6f5f2;
+    color: var(--ink);
+  }
+  .axis-flow-arrow { font-size: .72rem; color: var(--sub); padding: 1px 0 1px 16px; }
+  .axis-card.c1 .axis-flow-step { background: var(--pink-l); color: var(--pink-d); }
+  .axis-card.c2 .axis-flow-step { background: var(--teal-l); color: var(--teal-d); }
+  .axis-card.c3 .axis-flow-step { background: var(--orange-l); color: var(--orange-d); }
+  .axis-card .shot {
+    max-width: 210px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    display: block;
+    flex-shrink: 0;
+  }
+  @media (max-width: 720px) {
+    .axis-card { flex-direction: column; align-items: stretch; }
+    .axis-card .shot { max-width: 100%; margin-top: 10px; }
+  }
+  .footer-feature-row { display: flex; gap: 22px; align-items: flex-start; margin-top: 4px; }
+  .footer-feature-text { flex: 1; min-width: 0; }
+  .footer-feature-row .shot { max-width: 210px; flex-shrink: 0; }
+  @media (max-width: 720px) {
+    .footer-feature-row { flex-direction: column; align-items: stretch; }
+    .footer-feature-row .shot { max-width: 100%; }
+  }
+  .twin-shot-row { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .twin-shot-row .shot { max-width: 210px; flex-shrink: 0; margin-top: 0; }
+  .axis-card p.quote {
+    font-size: .82rem; color: var(--sub);
+    background: #f8f7f4; border-radius: 8px;
+    padding: 8px 10px; margin-top: 8px;
+  }
+
+  .finding-box {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    margin-top: 16px;
+  }
+  .finding-box .big { font-size: 1.25rem; font-weight: 800; color: var(--teal-d); }
+  .finding-box p { font-size: .9rem; color: #333; margin-top: 8px; }
+
+  .link-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: .84rem; }
+  .link-table th, .link-table td {
+    text-align: left; padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .link-table th { color: var(--sub); font-weight: 700; font-size: .78rem; }
+  .link-table .pill {
+    display: inline-block; font-size: .72rem; font-weight: 700;
+    padding: 2px 9px; border-radius: 999px; color: #fff;
+    white-space: nowrap;
+  }
+  .link-table td:last-child { white-space: nowrap; }
+  .link-table .pill.in { background: var(--teal); }
+  .link-table .pill.embed { background: var(--orange); }
+  .link-table .pill.out { background: #9aa0a6; }
+
+  .qa-box {
+    margin-top: 16px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .qa-box .q { font-weight: 700; font-size: .88rem; color: var(--ink); margin-bottom: 4px; }
+  .qa-box .a { font-size: .86rem; color: var(--sub); }
+
   footer {
     margin-top: 56px;
     padding-top: 20px;
@@ -95,23 +227,14 @@
     提案内容をブラウザ上で実際に操作できるモックアップです。下のボタンから開いて、本人画面と見守り家族画面の連動をお試しください。
   </p>
 
-  <div class="axisrow">
-    <div class="axiscard c1">
-      <div class="n">軸1</div>
-      <div class="t">見守り家族</div>
-    </div>
-    <div class="axiscard c2">
-      <div class="n">軸2</div>
-      <div class="t">AI通院コンシェルジュ</div>
-    </div>
-    <div class="axiscard c3">
-      <div class="n">軸3</div>
-      <div class="t">おまかせ受付</div>
-    </div>
+  <div class="axis">
+    <span class="a1">軸1：見守り家族</span>
+    <span class="a2">軸2：AI通院コンシェルジュ</span>
+    <span class="a3">軸3：おまかせ受付</span>
   </div>
 
   <div class="cta-row">
-    <a class="cta" href="app/">モックアップを開く</a>
+    <a class="cta" href="app/">モックアップを開く →</a>
   </div>
 
   <section>
@@ -123,7 +246,122 @@
     </ol>
   </section>
 
-  <footer>&copy; 2026 We'll Be Team</footer>
-</div>
+  <section>
+    <h2>なぜこのアプリが必要か ― アプリ利用を阻む「3つの壁」</h2>
+    <div class="problem-card">
+      <p>近畿大学病院公式アプリは、ブース設置やノベルティ配布など病院側の施策を重ねても、特に70歳以上の方からは次のような声が残っています。</p>
+      <p>「使い方が難しい」「診察券があるからアプリは不要」「月に1度しか来ないので入れなくていい」「めんどくさい。アプリは分からない」</p>
+      <ul class="wall-list">
+        <li><b>①登録の壁</b>：アプリを入れるだけでは使えず、平日の日中に病院の窓口でQRコードをもらう必要がある。家族を登録するときも本人の同席が必要。</li>
+        <li><b>②操作の壁</b>：当日の朝に「どこでも受付」を自分で操作するのが難しかったり、忘れてしまう。</li>
+        <li><b>③継続の壁</b>：月に1回しか通院しないと、アプリを入れておく理由を感じにくい。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>3つの壁に対応する3つの軸</h2>
+    <div class="axis-cards">
+      <div class="axis-card c1">
+        <div class="axis-text">
+          <span class="tag">軸1・登録の壁へ</span>
+          <h3>見守り家族</h3>
+          <p>本人が来院したときに、窓口やアバター受付で本人の同意を確認して、家族用の招待コードを発行します。家族は病院に来なくても、自分のスマホにコードを入れるだけで登録できます。本人がスマホを使うのが苦手でも、家族が使うことで本人も楽に通院できるようになります。</p>
+          <div class="axis-flow">
+            <div class="axis-flow-step">来院時に本人が同意</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">家族用の招待コードを発行</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">家族が自分のスマホで登録</div>
+          </div>
+        </div>
+        <img class="shot" src="assets/screens/axis1-family.png" alt="見守り家族（家族のスマホ画面）">
+      </div>
+      <div class="axis-card c2">
+        <div class="axis-text">
+          <span class="tag">軸2・継続／操作の壁へ</span>
+          <h3>AI通院コンシェルジュ</h3>
+          <p>アプリの中に、話しかけるだけで使えるAIを設置します。服薬サポート・症状の記録・診察前のメモ・持ち物チェック・操作の代わりの5つを担当。通院は月に1回でも薬は毎日飲むので、これがアプリを毎日開くきっかけになります。</p>
+          <p style="font-size:.78rem;color:var(--sub);margin-top:4px;">※ AIコンシェルジュが記録した症状等の情報は、端末内にのみ保存され、病院など外部に自動で送信されることはありません。症状等の記録は個人情報保護法上の要配慮個人情報にあたり、第三者への提供には本人の同意が必要とされているためです。見守り家族への共有は本人の同意（招待登録）を前提とした範囲にとどまり、医師に見せたい場合は受診時に本人の意思で画面を提示する想定です。</p>
+          <div class="axis-flow">
+            <div class="axis-flow-step">話しかける（声・文字）</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">AIが記録・返答</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">診察前メモに自動反映</div>
+          </div>
+        </div>
+        <img class="shot" src="assets/screens/axis2-ai.png" alt="AI通院コンシェルジュ（症状の記録・相談画面）">
+      </div>
+      <div class="axis-card c3">
+        <div class="axis-text">
+          <span class="tag">軸3・操作の壁へ</span>
+          <h3>おまかせ受付</h3>
+          <p>前日に届く予約通知に「明日の受付をしておく」ボタンを設置。押しておけば当日は自動で受付が済みます。一度オンにすれば次からも自動になるため、当日の朝に操作する必要がなくなります。</p>
+          <div class="axis-flow">
+            <div class="axis-flow-step">前日の予約通知</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">「おまかせ」をONにする</div>
+            <div class="axis-flow-arrow">↓</div>
+            <div class="axis-flow-step">当日は自動で受付・家族にも通知</div>
+          </div>
+        </div>
+        <img class="shot" src="assets/screens/axis3-omakase.png" alt="おまかせ受付（予約情報画面）">
+      </div>
+    </div>
+    <div class="problem-card" style="margin-top:16px;">
+      <p>AIコンシェルジュは便利ですが、会話のたびにAPIコストが発生するため、「何でもAIに聞けばいい」となると運用コストも増大してしまいます。</p>
+      <p>We'll Beの考え方では、見守り家族の機能を用意することで、ちょっとした声かけやAIに聞かなくても家族とのやり取りで解決できる内容を家族側に振り分けられるようにしています。見守り家族という本人と家族の接点を作ると同時に、AIコンシェルジュへの問い合わせを必要な場面に絞り、トークン消費・API呼び出し回数を抑えられる設計になっています。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>UI改修案 ― フッターメニュー新設とアプリ内完結化</h2>
+
+    <div class="footer-feature-row">
+      <div class="footer-feature-text">
+        <p style="font-size:.88rem;color:#444;">
+          見守り家族・AIコンシェルジュ・おまかせ受付の3つの軸をどの画面からでも支えられるよう、<b>フッターメニュー（ホーム／AIコンシェルジュ／見守り家族）を全画面に常設</b>しました。操作が苦手な方でも、どの画面からでも常にホームに戻れたり、操作のサポートが受けられる設計にすることで、離脱率の低下をねらいます。
+        </p>
+        <p style="font-size:.82rem;color:var(--sub);margin-top:6px;">
+          実装面では、既存のアプリ内の画面遷移構造に固定ナビゲーションのUI部品を1つ追加するだけで実現でき、裏側のデータや機能を新しく作る必要はありません。見た目（UI）の変更が中心です。
+        </p>
+      </div>
+      <img class="shot" src="assets/screens/home.png" alt="新設したフッターメニュー（ホーム画面）">
+    </div>
+
+    <div class="finding-box" style="margin-top:16px;">
+      <div class="big">ホーム画面アイコンの多くが外部サイト・外部アプリへ遷移</div>
+      <p>現状のアプリは、外部サービスへの遷移が多い状態でした。特に「診察呼出状況」は licarenote.jp という別サービスに飛び、せっかく診察券番号でログインしているのに受付番号を自分で手入力し直す必要があります。</p>
+      <p>ブラウザに飛ばされるたびに「ログインが外れた」と誤解したり、戻り方が分からなくなったりします（特に高齢者）。アプリとブラウザを行き来する手間そのものが離脱の原因になっていると考えました。</p>
+      <div class="twin-shot-row">
+        <img class="shot" src="assets/screens/病院HP.png" alt="病院HPをアプリ内の埋め込み表示で開いた画面">
+        <img class="shot" src="assets/screens/医療機関検索.png" alt="医療機関検索をアプリ内の埋め込み表示で開いた画面">
+      </div>
+    </div>
+
+    <table class="link-table">
+      <thead>
+        <tr><th>機能</th><th>遷移先</th><th>方針</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>診察呼出状況</td><td>licarenote.jp（外部サービス）</td><td><span class="pill in">アプリ内完結</span></td></tr>
+        <tr><td>採血状況・放射線検査・お薬状況・診療情報・予約変更依頼</td><td>各種手続き・状況確認</td><td><span class="pill in">アプリ内完結</span></td></tr>
+        <tr><td>医療機関検索／病院HP／近大ラジオ</td><td>外部サイト</td><td><span class="pill embed">埋め込み表示</span></td></tr>
+        <tr><td>フロアマップ／交通案内（泉ヶ丘）</td><td>院内情報（モーダル表示）</td><td><span class="pill in">アプリ内完結</span></td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:.88rem;color:#444;margin-top:14px;">
+      「家族とAIがそばにいる」を実現する前に、まず<b>「アプリの中で迷子にならない」＝アプリ内完結</b>を徹底します。手続き・状況確認（受付・呼出・会計・薬）やフロアマップ・交通案内はアプリ内に閉じ、医療機関検索・病院HP・近大ラジオのような外部サイトも、ブラウザへ丸ごと放り出すのではなく<b>アプリ内の埋め込み表示（閉じるボタン付き）</b>として開く形にしています（上の2枚が実際に表示した画面です）。
+    </p>
+
+    <div class="qa-box">
+      <div class="q">Q. 外部サイトも全部アプリから出さないようにするのか？</div>
+      <div class="a">A. はい、画面としては出しません。手続き・状況確認は本アプリのデータとしてアプリ内完結、医療機関検索や病院HPのような外部サイトも埋め込み表示でアプリの中にとどめ、ブラウザへは飛ばさない方針にしています。</div>
+    </div>
+  </section>
+
+  </div>
 </body>
 </html>
