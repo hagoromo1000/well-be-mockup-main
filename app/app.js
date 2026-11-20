@@ -470,6 +470,8 @@ function navigateTo(screenId, options = {}) {
   if (examplePanel) examplePanel.style.display = (screenId === 'symptom') ? 'flex' : 'none';
   const medExamplePanel = document.getElementById('demoExamplePanelMed');
   if (medExamplePanel) medExamplePanel.style.display = (screenId === 'med') ? 'flex' : 'none';
+  const voiceCtrlPanel = document.getElementById('voiceCtrlPanel');
+  if (voiceCtrlPanel) voiceCtrlPanel.style.display = (screenId === 'med' || screenId === 'symptom') ? 'flex' : 'none';
   if (screenId === 'patient-family' && typeof backToFamilyList === 'function') backToFamilyList();
 
   if (isFamily) {
