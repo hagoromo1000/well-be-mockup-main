@@ -2096,12 +2096,18 @@ button, select, input, textarea {
 @media (max-width: 600px) {
   body {
     background: var(--bg);
-    height: 100dvh;
-    overflow: hidden;
+    /* 100dvhはブラウザのアドレスバー等が出入りする前提の「最大」高さで、
+       実機（特にAndroid系ブラウザ）ではアドレスバー表示中はそれより
+       実際に見える領域が小さく、ヘッダーがブラウザUIの裏に隠れて
+       重なって見える不具合があった。常に確実に見える最小の高さ
+       （100svh）を使い、万一それでも収まらない端末のために
+       overflowもスクロール可能にしておく。 */
+    height: 100svh;
+    overflow-y: auto;
   }
 
   .demo-bar {
-    padding: 5px 8px;
+    padding: calc(5px + env(safe-area-inset-top)) 8px 5px;
     gap: 5px;
   }
 
@@ -2475,8 +2481,14 @@ button, select, input, textarea {
 @media (max-width: 600px) {
   body {
     background: var(--bg);
-    height: 100dvh;
-    overflow: hidden;
+    /* 100dvhはブラウザのアドレスバー等が出入りする前提の「最大」高さで、
+       実機（特にAndroid系ブラウザ）ではアドレスバー表示中はそれより
+       実際に見える領域が小さく、ヘッダーがブラウザUIの裏に隠れて
+       重なって見える不具合があった。常に確実に見える最小の高さ
+       （100svh）を使い、万一それでも収まらない端末のために
+       overflowもスクロール可能にしておく。 */
+    height: 100svh;
+    overflow-y: auto;
   }
 
   .stage {
